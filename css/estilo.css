@@ -1,0 +1,106 @@
+
+* {
+  margin:0;
+  padding:0;
+}
+
+body {
+/*	background:url(../imagenes/ricepaper_v3.png) repeat;*/
+
+	background:url(../imagenes/tileable_wood_texture.png) repeat #333;
+	margin:0;
+/*background:#FFF;*/
+}
+
+
+
+.fdizquierda {float: left; width: 29%;}
+
+.fdderecha {float: right; width: 68%; }
+
+
+header {
+    background-image: -webkit-gradient(
+	linear,
+	left top,
+	left bottom,
+	color-stop(0, #454A4E),
+	color-stop(1, #464F52)
+);
+background-image: -o-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -moz-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -webkit-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -ms-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: linear-gradient(to bottom, #454A4E 0%, #464F52 100%);
+	background-color:#454A4E;
+	height:100px;
+	margin:0;
+	padding-left:100px;
+}
+
+#header {
+    background-image: -webkit-gradient(
+	linear,
+	left top,
+	left bottom,
+	color-stop(0, #454A4E),
+	color-stop(1, #464F52)
+);
+background-image: -o-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -moz-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -webkit-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: -ms-linear-gradient(bottom, #454A4E 0%, #464F52 100%);
+background-image: linear-gradient(to bottom, #454A4E 0%, #464F52 100%);
+	background-color:#454A4E;
+	height:100px;
+	margin:0;
+	padding-left:100px;
+}
+
+.logueo {
+	background-color:#2b2f32;
+	height:800px;
+
+}
+
+
+
+
+
+.content {
+    height: 100%;
+    margin: 20px auto;
+    padding: 16px;
+    width: 90%;
+}
+
+.donde {
+    width: 700px;
+    margin-left: 100px;
+    margin-top: 20px;
+}
+
+#menu li.active a {
+	font-weight: bold;
+	color:#222;
+	text-shadow: 0 0 0.1em #F6CED8, 0 0 0.2em #F6CED8;
+}
+
+#menu li a {
+	color:#EBEBEB;
+	font-weight: bold;
+	text-shadow: 0.1em 0.1em 0.05em #333;
+}
+
+#menu li a:hover {
+	color:#656565;
+	font-weight: bold;
+	text-shadow: -1px -1px white, 1px 1px #fff;
+}
+
+
+
+
+
+
+
