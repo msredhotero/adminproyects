@@ -20,7 +20,7 @@ $servicios = new Servicios();
 
 
 
-<title>Acceso Restringido: Caracol Bienes Raíces</title>
+<title>Restricted access: Project Management System</title>
 
 
 
@@ -171,8 +171,7 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
             </div>
 
             <div align="center">
-            	<img src="imagenes/logodebase2.png">
-				<div align="center"><p style="color:#363636; font-size:28px;">Acceso al panel de control</p></div>
+				<div align="center"><p style="color:#363636; font-size:28px;">Access to the control panel</p></div>
                 <br>
             </div>
 			<form role="form" class="form-horizontal">
@@ -187,7 +186,7 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
               </div>
 
               <div class="form-group">
-                <label for="ejemplo_password_2" class="col-md-2 control-label" style="color:#363636;text-align:left;">Contraseña</label>
+                <label for="ejemplo_password_2" class="col-md-2 control-label" style="color:#363636;text-align:left;">Password</label>
                 <div class="col-lg-7">
                   <input type="password" class="form-control" id="pass" name="pass" 
                          placeholder="password">
@@ -197,7 +196,7 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
               
               
               <div class="form-group">
-              	<label for="olvido" class="control-label" style="color:#363636">¿Has olvidado tu contraseña?. <a href="recuperarpassword.php">Recuperar.</a></label>
+              	<label for="olvido" class="control-label" style="color:#363636">Have you forgotten your password?. <a href="recuperarpassword.php">Recover.</a></label>
               </div>
              
               <div class="form-group">
