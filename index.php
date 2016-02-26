@@ -48,25 +48,25 @@ $servicios = new Servicios();
 				
 					$("#email").click(function(event) {
         			$("#email").removeClass("alert alert-danger");
-					$("#email").attr('placeholder','Ingrese el email');
+					$("#email").attr('placeholder','Enter the email');
 					$("#error").removeClass("alert alert-danger");
 					$("#error").text('');
         			});
 
         			$("#email").change(function(event) {
         			$("#email").removeClass("alert alert-danger");
-        			$("#email").attr('placeholder','Ingrese el email');
+        			$("#email").attr('placeholder','Enter the email');
         			});
 					
 					
 					$("#pass").click(function(event) {
         			$("#pass").removeClass("alert alert-danger");
-					$("#pass").attr('placeholder','Ingrese el password');
+					$("#pass").attr('placeholder','Enter the password');
         			});
 
         			$("#pass").change(function(event) {
         			$("#pass").removeClass("alert alert-danger");
-        			$("#pass").attr('placeholder','Ingrese el password');
+        			$("#pass").attr('placeholder','Enter the password');
         			});
 					
 				
@@ -75,14 +75,14 @@ $servicios = new Servicios();
         				$error = "";
 		
         				if ($("#email").val() == "") {
-        					$error = "Es obligatorio el campo E-Mail.";
+        					$error = "The email field is mandatory.";
 
         					$("#error").addClass("alert alert-danger");
         					$("#error").attr('placeholder',$error);
         				}
 						
 						if ($("#pass").val() == "") {
-        					$error = "Es obligatorio el campo Password.";
+        					$error = "The passwrod field is mandatory.";
 
         					$("#pass").addClass("alert alert-danger");
         					$("#pass").attr('placeholder',$error);
@@ -94,7 +94,7 @@ $servicios = new Servicios();
 						var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 						
 						if( !emailReg.test( $("#email").val() ) ) {
-							$error = "El E-Mail ingresado es inválido.";
+							$error = "The email entered is invalid.";
 
         					$("#error").addClass("alert alert-danger");
         					$("#error").text($error);
@@ -171,6 +171,7 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
             </div>
 
             <div align="center">
+            	<img src="imagenes/2723396196_f8b6dfd49d.jpg" width="15%" height="15%">
 				<div align="center"><p style="color:#363636; font-size:28px;">Access to the control panel</p></div>
                 <br>
             </div>

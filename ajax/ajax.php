@@ -5,7 +5,7 @@ include ('../includes/funcionesProyects.php');
 
 
 $serviciosUsuarios  = new ServiciosUsuarios();
-$serviciosProyects  = new ServiciosProyects();
+$serviciosProyect  = new ServiciosProyects();
 
 
 $accion = $_POST['accion'];
@@ -83,6 +83,32 @@ break;
 
 /* Fin */
 
+
+/* PARA Responsible */
+case 'insertarResponsible': 
+insertarResponsible($serviciosProyect); 
+break; 
+case 'modificarResponsible': 
+modificarResponsible($serviciosProyect); 
+break; 
+case 'eliminarResponsible': 
+eliminarResponsible($serviciosProyect); 
+break; 
+
+/* Fin */
+
+/* PARA Proyects */
+case 'insertarProyects': 
+insertarProyects($serviciosProyect); 
+break; 
+case 'modificarProyects': 
+modificarProyects($serviciosProyect); 
+break; 
+case 'eliminarProyects': 
+eliminarProyects($serviciosProyect); 
+break; 
+
+/* Fin */
 }
 
 
@@ -97,7 +123,7 @@ $res = $serviciosProyect->insertarEmployee($lastname,$firstname,$id);
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'There was an error inserting data';
 }
 }
 function modificarEmployee($serviciosProyect) {
@@ -109,7 +135,7 @@ $res = $serviciosProyect->modificarEmployee($id,$lastname,$firstname,$id);
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'There was an error modifying data';
 }
 }
 function eliminarEmployee($serviciosProyect) {
@@ -121,62 +147,66 @@ echo $res;
 /* Fin */ 
 
 
-/* PARA Proyect */
-function insertarProyect($serviciosProyect) {
-$title = $_POST['title'];
-$price = $_POST['price'];
-$refemployee = $_POST['refemployee'];
-$observations = $_POST['observations'];
-$res = $serviciosProyect->insertarProyect($title,$price,$refemployee,$observations);
-if ((integer)$res > 0) {
-echo '';
-} else {
-echo 'Huvo un error al insertar datos';
-}
-}
-function modificarProyect($serviciosProyect) {
-$id = $_POST['id'];
-$title = $_POST['title'];
-$price = $_POST['price'];
-$refemployee = $_POST['refemployee'];
-$observations = $_POST['observations'];
-$res = $serviciosProyect->modificarProyect($id,$title,$price,$refemployee,$observations);
-if ($res == true) {
-echo '';
-} else {
-echo 'Huvo un error al modificar datos';
-}
-}
-function eliminarProyect($serviciosProyect) {
-$id = $_POST['id'];
-$res = $serviciosProyect->eliminarProyect($id);
-echo $res;
-}
+/* PARA Proyects */
+function insertarProyects($serviciosProyect) { 
+$title = $_POST['title']; 
+$price = $_POST['price']; 
+$refemployee = $_POST['refemployee']; 
+$refresponsible = $_POST['refresponsible']; 
+$refstate = $_POST['refstate']; 
+$observations = $_POST['observations']; 
+$res = $serviciosProyect->insertarProyects($title,$price,$refemployee,$refresponsible,$refstate,$observations); 
+if ((integer)$res > 0) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al insertar datos';	
+} 
+} 
+function modificarProyects($serviciosProyect) { 
+$id = $_POST['id']; 
+$title = $_POST['title']; 
+$price = $_POST['price']; 
+$refemployee = $_POST['refemployee']; 
+$refresponsible = $_POST['refresponsible']; 
+$refstate = $_POST['refstate']; 
+$observations = $_POST['observations']; 
+$res = $serviciosProyect->modificarProyects($id,$title,$price,$refemployee,$refresponsible,$refstate,$observations); 
+if ($res == true) { 
+echo ''; 
+} else { 
+echo 'Huvo un error al modificar datos'; 
+} 
+} 
+function eliminarProyects($serviciosProyect) { 
+$id = $_POST['id']; 
+$res = $serviciosProyect->eliminarProyects($id); 
+echo $res; 
+} 
 
-/* Fin */ 
+/* Fin */
 
 
 
 /* PARA State */
 function insertarState($serviciosProyect) {
 $state = $_POST['state'];
-$icono = $_POST['icono'];
-$res = $serviciosProyect->insertarState($state,$icono);
+
+$res = $serviciosProyect->insertarState($state);
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'There was an error inserting data';
 }
 }
 function modificarState($serviciosProyect) {
 $id = $_POST['id'];
 $state = $_POST['state'];
-$icono = $_POST['icono'];
-$res = $serviciosProyect->modificarState($id,$state,$icono);
+
+$res = $serviciosProyect->modificarState($id,$state);
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'There was an error modifying data';
 }
 }
 function eliminarState($serviciosProyect) {
@@ -198,7 +228,7 @@ $res = $serviciosProyect->insertarUser($user,$password,$refroll,$email,$fullname
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'There was an error inserting data';
 }
 }
 function modificarUser($serviciosProyect) {
@@ -212,7 +242,7 @@ $res = $serviciosProyect->modificarUser($id,$user,$password,$refroll,$email,$ful
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'There was an error modifying data';
 }
 }
 function eliminarUser($serviciosProyect) {
@@ -222,6 +252,36 @@ echo $res;
 }
 
 /* Fin */ 
+
+
+/* PARA Responsible */
+function insertarResponsible($serviciosProyect) { 
+$responsible = $_POST['responsible']; 
+$res = $serviciosProyect->insertarResponsible($responsible); 
+if ((integer)$res > 0) { 
+echo ''; 
+} else { 
+echo 'There was an error inserting data';	
+} 
+} 
+function modificarResponsible($serviciosProyect) { 
+$id = $_POST['id']; 
+$responsible = $_POST['responsible']; 
+$res = $serviciosProyect->modificarResponsible($id,$responsible); 
+if ($res == true) { 
+echo ''; 
+} else { 
+echo 'There was an error modifying data'; 
+} 
+} 
+function eliminarResponsible($serviciosProyect) { 
+$id = $_POST['id']; 
+$res = $serviciosProyect->eliminarResponsible($id); 
+echo $res; 
+} 
+
+/* Fin */
+
 
 /////////////////////////////////////////////////////***** FIN **********/////////////////////////////////////////////////////
 
@@ -233,135 +293,11 @@ function entrar($serviciosUsuarios) {
 }
 
 
-function registrar($serviciosUsuarios) {
-	$apellido			=	$_POST['apellido'];
-	$password			=	$_POST['password'];
-	$refroll			=	2;
-	$email				=	$_POST['email'];
-	$nombre				=	$_POST['nombre'];
-	$telefono			=	'';
-	$direccion			=	$_POST['direccion'];
-	$imagen				=	'';
-	$mime				=	'';
-	$carpeta			=	'';
-	$intentoserroneos	=	0;
-	$res = $serviciosUsuarios->insertarUsuario($apellido,$password,$refroll,$email,$nombre,$telefono,$direccion,$imagen,$mime,$carpeta,$intentoserroneos);
-	if ((integer)$res > 0) {
-		echo '';	
-	} else {
-		echo $res;	
-	}
-}
-
-
-function insertarUsuario($serviciosUsuarios) {
-	$apellido			=	$_POST['apellido'];
-	$password			=	$_POST['password'];
-	$refroll			=	2;
-	$email				=	$_POST['email'];
-	$nombre				=	$_POST['nombre'];
-	$telefono			=	'';
-	$direccion			=	$_POST['direccion'];
-	$imagen				=	'';
-	$mime				=	'';
-	$carpeta			=	'';
-	$intentoserroneos	=	0;
-	echo $serviciosUsuarios->insertarUsuario($apellido,$password,$refroll,$email,$nombre,$telefono,$direccion,$imagen,$mime,$carpeta,$intentoserroneos);
-}
-
-
-function modificarUsuario($serviciosUsuarios) {
-	$id					=	$_POST['id'];
-	$apellido			=	$_POST['apellido'];
-	$password			=	$_POST['password'];
-	$refroll			=	2;
-	$email				=	$_POST['email'];
-	$nombre				=	$_POST['nombre'];
-	$telefono			=	'';
-	$direccion			=	$_POST['direccion'];
-	$imagen				=	'';
-	$mime				=	'';
-	$carpeta			=	'';
-	$intentoserroneos	=	0;
-	echo $serviciosUsuarios->modificarUsuario($id,$apellido,$password,$refroll,$email,$nombre,$telefono,$direccion,$imagen,$mime,$carpeta,$intentoserroneos);
-}
-
-
-function existeCodigoMod($serviciosProductos) {
-	$id		=	$_POST['id'];
-	$codigo =	$_POST['codigo'];
-	echo	$serviciosProductos->existeCodigoMod($id,$codigo);
-}
-
-function existeCodigo($serviciosProductos) {
-	$codigo =	$_POST['codigo'];
-	echo	$serviciosProductos->existeCodigo($codigo);
-}
-
-
-function insertarProveedores($serviciosProductos) {
-	$proveedor	=	$_POST['proveedor'];
-	$direccion	=	$_POST['direccion'];
-	$telefono	=	$_POST['telefono'];
-	$cuit		=	$_POST['cuit'];
-	$nombre		=	$_POST['nombre'];
-	$email		=	$_POST['email'];
-	echo	$serviciosProductos->insertarProveedores($proveedor,$direccion,$telefono,$cuit,$nombre,$email);
-}
-
-
-function eliminarProveedores($serviciosProductos) {
-	$id			=	$_POST['id'];
-
-	echo	$serviciosProductos->eliminarProveedores($id);
-}
-
-function modificarProveedores($serviciosProductos) {
-	$id			=	$_POST['id'];
-	$proveedor	=	$_POST['proveedor'];
-	$direccion	=	$_POST['direccion'];
-	$telefono	=	$_POST['telefono'];
-	$cuit		=	$_POST['cuit'];
-	$nombre		=	$_POST['nombre'];
-	$email		=	$_POST['email'];
-	echo	$serviciosProductos->modificarProveedores($id,$proveedor,$direccion,$telefono,$cuit,$nombre,$email);
-}
-
-
 
 function enviarMail($serviciosUsuarios) {
 	$email		=	$_POST['email'];
 	$pass		=	$_POST['pass'];
 	echo $serviciosUsuarios->login($email,$pass);
-}
-
-function traerCodigo($serviciosProductos) {
-	$codigo =	$_POST['codigo'];
-	
-	$res 	= $serviciosProductos->traerCodigo($codigo);
-	echo $res;
-}
-
-
-function traerProductoPorId($serviciosProductos) {
-	$id 	=	$_POST['id'];
-	
-	$res 	= $serviciosProductos->traerProductoPorId($id);
-	echo $res;
-}
-
-function traerProductoPorCodigo($serviciosProductos) {
-	$codigo		=	$_POST['codigo'];
-	
-	$res 		= $serviciosProductos->traerProductoPorCodigo($codigo);
-	echo $res;
-}
-
-function traerProductoPorCodigoBarra($serviciosProductos) {
-	$codigobarra 	=	$_POST['$codigobarra'];
-	
-	$res			= $serviciosProductos->traerProductoPorCodigoBarra($codigobarra);
-	echo $res;
 }
 
 
@@ -451,47 +387,6 @@ function devolverImagen($nroInput) {
 	return array('tfoto' => $tfoto, 'type' => $type);	
 }
 
-function insertarProducto($serviciosProductos) {
-	
-	$producto		=	$_POST['producto'];
-	$precio_unit	=	$_POST['precio_unit'];
-	$precio_venta	=	$_POST['precio_venta'];
-	$peso			=	$_POST['peso']; 
-	$reftipoproducto=	$_POST['reftipoproducto'];
-	$observacion	=	$_POST['observacion'];
-	
-	$res 			= $serviciosProductos->insertarProducto($producto, $precio_unit, $precio_venta, $peso, '', '', $reftipoproducto, $observacion);
-	
-	$valor = 'imagen1';
-	
-	$serviciosProductos->subirArchivo($valor,$res);
-	
-	echo $res;
-}
 
-function modificarProducto($serviciosProductos) {
-	$id 			=	$_POST['id'];
-	$producto		=	$_POST['producto'];
-	$precio_unit	=	$_POST['precio_unit'];
-	$precio_venta	=	$_POST['precio_venta'];
-	$peso			=	$_POST['peso']; 
-	$reftipoproducto=	$_POST['reftipoproducto'];
-	$observacion	=	$_POST['observacion'];
-
-	$res 			= $serviciosProductos->modificarProducto($id,$producto, $precio_unit, $precio_venta, $peso, '', '', $reftipoproducto, $observacion);
-	
-	$valor = 'imagen1';
-	
-	$serviciosProductos->subirArchivo($valor,$res);
-	
-	echo $res;
-}
-
-function eliminarProducto($serviciosProductos) {
-	$id 			=	$_POST['id'];
-
-	$res 			= $serviciosProductos->eliminarProducto($id);
-	echo $res;
-}
 
 ?>

@@ -53,8 +53,9 @@ function menu($usuario,$titulo,$rol,$empresa) {
 		</div> 
 	
 		<div id="navigation" >
-			<img src="../imagenes/caracol_bg.png"/ style="padding-bottom:5%;" width="90%">
-			
+			<div align="center">
+			<img src="../imagenes/caracol_bg.png"/ style="padding-bottom:5%;" width="40%">
+			</div>
 				<nav class="nav">
 					<ul>
 						'.utf8_encode($cadmenu).'
@@ -90,7 +91,7 @@ function validacion($tabla) {
 			$("#idEliminar").val(usersid);
 			$("#dialog2").dialog("open");
 		  } else {
-			alert("Error, vuelva a realizar la acción.");	
+			alert("Error redo action.");	
 		  }
 	});//fin del boton eliminar
 	
@@ -100,12 +101,12 @@ function validacion($tabla) {
 			url = "modificar.php?id=" + usersid;
 			$(location).attr("href",url);
 		  } else {
-			alert("Error, vuelva a realizar la acción.");	
+			alert("Error redo action.");	
 		  }
 	});//fin del boton modificar';
 	
 	if ($res == false) {
-		return 'Error al traer datos';
+		return 'Failed to fetch data';
 	} else {
 		
 		$jquery	=	'';
@@ -122,13 +123,13 @@ function validacion($tabla) {
 						$("#'.$row[0].'").removeClass("alert-danger");
 						if ($(this).val() == "") {
 							$("#'.$row[0].'").attr("value","");
-							$("#'.$row[0].'").attr("placeholder","Ingrese el '.ucwords($row[0]).'...");
+							$("#'.$row[0].'").attr("placeholder","Enter the '.ucwords($row[0]).'...");
 						}
 					});
 				
 					$("#'.$row[0].'").change(function(event) {
 						$("#'.$row[0].'").removeClass("alert-danger");
-						$("#'.$row[0].'").attr("placeholder","Ingrese el '.ucwords($row[0]).'");
+						$("#'.$row[0].'").attr("placeholder","Enter the '.ucwords($row[0]).'");
 					});
 					
 					';
@@ -136,7 +137,7 @@ function validacion($tabla) {
 					$cuerpoValidacion = $cuerpoValidacion.'
 					
 						if ($("#'.$row[0].'").val() == "") {
-							$error = "Es obligatorio el campo '.ucwords($row[0]).'.";
+							$error = "You must complete '.ucwords($row[0]).'.";
 							$("#'.$row[0].'").addClass("alert-danger");
 							$("#'.$row[0].'").attr("placeholder",$error);
 						}
@@ -155,13 +156,13 @@ function validacion($tabla) {
 							$("#'.$campo.'").removeClass("alert-danger");
 							if ($(this).val() == "") {
 								$("#'.$campo.'").attr("value","");
-								$("#'.$campo.'").attr("placeholder","Ingrese el '.$label.'...");
+								$("#'.$campo.'").attr("placeholder","Enter the '.$label.'...");
 							}
 						});
 					
 						$("#'.$campo.'").change(function(event) {
 							$("#'.$campo.'").removeClass("alert-danger");
-							$("#'.$campo.'").attr("placeholder","Ingrese el '.$label.'");
+							$("#'.$campo.'").attr("placeholder","Enter the '.$label.'");
 						});
 						
 						';
@@ -170,7 +171,7 @@ function validacion($tabla) {
 						$cuerpoValidacion = $cuerpoValidacion.'
 					
 							if ($("#'.$campo.'").val() == "") {
-								$error = "Es obligatorio el campo '.$label.'.";
+								$error = "You must complete '.$label.'.";
 								$("#'.$campo.'").addClass("alert-danger");
 								$("#'.$campo.'").attr("placeholder",$error);
 							}
@@ -187,13 +188,13 @@ function validacion($tabla) {
 							$("#'.$campo.'").removeClass("alert-danger");
 							if ($(this).val() == "") {
 								$("#'.$campo.'").attr("value","");
-								$("#'.$campo.'").attr("placeholder","Ingrese el '.$label.'...");
+								$("#'.$campo.'").attr("placeholder","Enter the '.$label.'...");
 							}
 						});
 					
 						$("#'.$campo.'").change(function(event) {
 							$("#'.$campo.'").removeClass("alert-danger");
-							$("#'.$campo.'").attr("placeholder","Ingrese el '.$label.'");
+							$("#'.$campo.'").attr("placeholder","Enter the '.$label.'");
 						});
 						
 						';
@@ -202,7 +203,7 @@ function validacion($tabla) {
 						$cuerpoValidacion = $cuerpoValidacion.'
 					
 							if ($("#'.$campo.'").val() == "") {
-								$error = "Es obligatorio el campo '.$label.'.";
+								$error = "You must complete '.$label.'.";
 								$("#'.$campo.'").addClass("alert-danger");
 								$("#'.$campo.'").attr("placeholder",$error);
 							}

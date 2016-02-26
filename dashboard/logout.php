@@ -19,7 +19,7 @@ session_destroy();
 
 
 
-<title>Facturación - Cuentas Por Cobrar</title>
+<title>Management: System Project</title>
 
 
 
@@ -107,9 +107,9 @@ session_destroy();
 
 	<div class="row" style="height:160px;" align="center">
 <br>
-<h2>Acaba de salir del sistema. </h2>
+<h2>Just log out. </h2>
 
-<h4>Si quiere volver al Inicio presione <a href="../index.php" style="color:#009; font-weight:bold;">AQUI</a></h4>
+<h4>If you want to return to Home, Press <a href="../index.php" style="color:#009; font-weight:bold;">Here</a></h4>
 
 
 </div>

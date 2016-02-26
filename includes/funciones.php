@@ -67,7 +67,7 @@ class Servicios {
 								<td>
 									
 									<div class="btn-group">
-										<button class="btn btn-success" type="button">Acciones</button>
+										<button class="btn btn-success" type="button">Action</button>
 										
 										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
 										<span class="caret"></span>
@@ -77,11 +77,11 @@ class Servicios {
 										<ul class="dropdown-menu" role="menu">
 										   
 											<li>
-											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Modificar</a>
+											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Update</a>
 											</li>
 										
 											<li>
-											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Delete</a>
 											</li>
 											
 										</ul>
@@ -95,7 +95,7 @@ class Servicios {
 								<td>
 									
 									<div class="btn-group">
-										<button class="btn btn-success" type="button">Acciones</button>
+										<button class="btn btn-success" type="button">Action</button>
 										
 										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
 										<span class="caret"></span>
@@ -105,7 +105,7 @@ class Servicios {
 										<ul class="dropdown-menu" role="menu">
 										
 											<li>
-											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Borrar</a>
+											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Delete</a>
 											</li>
 											
 										</ul>
@@ -121,7 +121,7 @@ class Servicios {
             	<thead>
                 	<tr>
                     	'.$cabeceras.'
-                        <th>Acciones</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="'.$idresultados.'">
@@ -137,12 +137,87 @@ class Servicios {
 		return $cadView;
 	}
 	
+	function camposTablaViewNoAction($cabeceras,$datos,$cantidad) {
+		$cadView = '';
+		$cadRows = '';
+		switch ($cantidad) {
+			case 99:
+				$cantidad = 8;
+				$classMod = '';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+				break;
+			case 98:
+				$cantidad = 3;
+				$classMod = 'varmodificarpredio';
+				$classEli = 'varborrarpredio';
+				$idresultados = "resultadospredio";
+				break;
+			case 97:
+				$cantidad = 3;
+				$classMod = 'varmodificarprincipal';
+				$classEli = 'varborrarprincipal';
+				$idresultados = "resultadosprincipal";
+				break;
+			default:
+				$classMod = 'varmodificar';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+		}
+		/*if ($cantidad == 99) {
+			$cantidad = 5;
+			$classMod = 'varmodificargoleadores';
+			$classEli = 'varborrargoleadores';
+			$idresultados = "resultadosgoleadores";
+		} else {
+			$classMod = 'varmodificar';
+			$classEli = 'varborrar';
+			$idresultados = "resultados";
+		}*/
+		while ($row = mysql_fetch_array($datos)) {
+			$cadsubRows = '';
+			$cadRows = $cadRows.'
+			
+					<tr class="'.$row[0].'">
+                        	';
+			
+			
+			for ($i=1;$i<=$cantidad;$i++) {
+				
+				$cadsubRows = $cadsubRows.'<td><div style="height:60px;overflow:auto;">'.$row[$i].'</div></td>';	
+			}
+			
+			
+			
+		}
+		
+		$cadView = $cadView.'
+			<table class="table table-striped table-responsive" id="example">
+            	<thead>
+                	<tr>
+                    	'.$cabeceras.'
+                        
+                    </tr>
+                </thead>
+                <tbody id="'.$idresultados.'">
+
+                	'.utf8_encode($cadsubRows).'
+                </tbody>
+            </table>
+			<div style="margin-bottom:85px; margin-right:60px;"></div>
+		
+		';	
+		
+		
+		return $cadView;
+	}
+	
 	
 	
 	function camposTabla($accion,$tabla,$lblcambio,$lblreemplazo,$refdescripcion,$refCampo) {
 		$sql	=	"show columns from ".$tabla;
 		$res 	=	$this->query($sql,0);
-		
+		$label = '';
 		$camposEscondido = "";
 		/* Analizar para despues */
 		/*if (count($refencias) > 0) {
@@ -157,7 +232,7 @@ class Servicios {
 		
 		
 		if ($res == false) {
-			return 'Error al traer datos';
+			return 'Failed to fetch data';
 		} else {
 			
 			$form	=	'';
@@ -328,7 +403,7 @@ class Servicios {
 												<div class="form-group col-md-6">
 													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 													<div class="input-group col-md-12">
-														<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required></textarea>
+														<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required></textarea>
 													</div>
 													
 												</div>
@@ -344,7 +419,7 @@ class Servicios {
 												<div class="form-group col-md-6">
 													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 													<div class="input-group col-md-12">
-														<input type="text" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
+														<input type="text" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required>
 													</div>
 												</div>
 												
@@ -495,7 +570,7 @@ class Servicios {
 								<div class="form-group col-md-6">
 									<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 									<div class="input-group col-md-12 fontcheck">
-										<input type="checkbox" '.$activo.' class="form-control" id="'.$campo.'" name="'.$campo.'" style="width:50px;" required> <p>Si/No</p>
+										<input type="checkbox" '.$activo.' class="form-control" id="'.$campo.'" name="'.$campo.'" style="width:50px;" required> <p>Yes/No</p>
 									</div>
 								</div>
 								
@@ -565,7 +640,7 @@ class Servicios {
 											<div class="form-group col-md-6">
 												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 												<div class="input-group col-md-12">
-													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>'.utf8_encode(mysql_result($resMod,0,$row[0])).'</textarea>
+													<textarea type="text" rows="10" cols="6" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required>'.utf8_encode(mysql_result($resMod,0,$row[0])).'</textarea>
 												</div>
 												
 											</div>
@@ -603,7 +678,7 @@ class Servicios {
 												<div class="form-group col-md-6">
 													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 													<div class="input-group col-md-12">
-														<input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
+														<input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required>
 													</div>
 												</div>
 												
@@ -738,7 +813,7 @@ class Servicios {
 									<div class="form-group col-md-6">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group col-md-12">
-											<input type="text" class="form-control" value="'.utf8_encode(mysql_result($resTipoVenta,0,$campo)).'" id="'.$campo.'" name="'.$campo.'" placeholder="Ingrese el '.$label.'..." required>
+											<input type="text" class="form-control" value="'.utf8_encode(mysql_result($resTipoVenta,0,$campo)).'" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required>
 										</div>
 									</div>
 									

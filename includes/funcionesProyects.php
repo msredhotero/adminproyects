@@ -52,63 +52,79 @@ return $res;
 /* End */
 
 
-/* PARA Proyect */
+/* PARA Proyects */
 
-function insertarProyect($title,$price,$refemployee,$observations) {
-$sql = "insert into proyects(idproyect,title,price,refemployee,observations)
-values ('','".utf8_decode($title)."',".$price.",".$refemployee.",'".utf8_decode($observations)."')";
-$res = $this->query($sql,1);
-return $res;
-}
-
-
-function modificarProyect($id,$title,$price,$refemployee,$observations) {
-$sql = "update proyects
-set
-title = '".utf8_decode($title)."',price = ".$price.",refemployee = ".$refemployee.",observations = '".utf8_decode($observations)."'
-where idproyect =".$id;
-$res = $this->query($sql,0);
-return $res;
-}
+function insertarProyects($title,$price,$refemployee,$refresponsible,$refstate,$observations) { 
+$sql = "insert into proyects(idproyect,title,price,refemployee,refresponsible,refstate,observations) 
+values ('','".utf8_decode($title)."',".$price.",".$refemployee.",".$refresponsible.",".$refstate.",'".utf8_decode($observations)."')"; 
+$res = $this->query($sql,1); 
+return $res; 
+} 
 
 
-function eliminarProyect($id) {
-$sql = "delete from proyects where idproyect =".$id;
-$res = $this->query($sql,0);
-return $res;
-}
+function modificarProyects($id,$title,$price,$refemployee,$refresponsible,$refstate,$observations) { 
+$sql = "update proyects 
+set 
+title = '".utf8_decode($title)."',price = ".$price.",refemployee = ".$refemployee.",refresponsible = ".$refresponsible.",refstate = ".$refstate.",observations = '".utf8_decode($observations)."' 
+where idproyect =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
 
 
-function traerProyect() {
-$sql = "select idproyect,title,price,refemployee,observations from proyects order by 1";
-$res = $this->query($sql,0);
-return $res;
-}
+function eliminarProyects($id) { 
+$sql = "delete from proyects where idproyect =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+function traerProyects() { 
+$sql = "select idproyect,title,price,u.user,r.responsible,s.state,observations,refemployee,refresponsible ,refstate
+		from proyects p 
+		inner join user u on u.iduser = p.refemployee
+		inner join responsibles r on r.idresponsible = p.refresponsible
+		inner join states s on s.idstate = p.refstate
+		order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+function traerProyectsPorUsuario($idUser) { 
+$sql = "select idproyect,title,price,u.user,r.responsible,s.state,observations,refemployee,refresponsible ,refstate
+		from proyects p 
+		inner join user u on u.iduser = p.refemployee
+		inner join responsibles r on r.idresponsible = p.refresponsible
+		inner join states s on s.idstate = p.refstate
+		where u.iduser = ".$idUser."
+		order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
 
 
-function traerProyectPorId($id) {
-$sql = "select idproyect,title,price,refemployee,observations from proyects where idproyect =".$id;
-$res = $this->query($sql,0);
-return $res;
-}
+function traerProyectsPorId($id) { 
+$sql = "select idproyect,title,price,refemployee,refresponsible,refstate,observations from proyects where idproyect =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
 
 /* Fin */
 
 
 /* PARA State */
 
-function insertarState($state,$icono) {
-$sql = "insert into states(idstate,state,icono)
-values ('','".utf8_decode($state)."','".utf8_decode($icono)."')";
+function insertarState($state) {
+$sql = "insert into states(idstate,state)
+values ('','".utf8_decode($state)."')";
 $res = $this->query($sql,1);
 return $res;
 }
 
 
-function modificarState($id,$state,$icono) {
+function modificarState($id,$state) {
 $sql = "update states
 set
-state = '".utf8_decode($state)."',icono = '".utf8_decode($icono)."'
+state = '".utf8_decode($state)."'
 where idstate =".$id;
 $res = $this->query($sql,0);
 return $res;
@@ -123,14 +139,14 @@ return $res;
 
 
 function traerState() {
-$sql = "select idstate,state,icono from states order by 1";
+$sql = "select idstate,state from states order by 1";
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function traerStatePorId($id) {
-$sql = "select idstate,state,icono from states where idstate =".$id;
+$sql = "select idstate,state from states where idstate =".$id;
 $res = $this->query($sql,0);
 return $res;
 }
@@ -143,7 +159,7 @@ return $res;
 /* PARA User */
 
 function insertarUser($user,$password,$refroll,$email,$fullname) {
-$sql = "insert into user(idusuario,user,password,refroll,email,fullname)
+$sql = "insert into user(iduser,user,password,refroll,email,fullname)
 values ('','".utf8_decode($user)."','".utf8_decode($password)."',".$refroll.",'".utf8_decode($email)."','".utf8_decode($fullname)."')";
 $res = $this->query($sql,1);
 return $res;
@@ -154,33 +170,122 @@ function modificarUser($id,$user,$password,$refroll,$email,$fullname) {
 $sql = "update user
 set
 user = '".utf8_decode($user)."',password = '".utf8_decode($password)."',refroll = ".$refroll.",email = '".utf8_decode($email)."',fullname = '".utf8_decode($fullname)."'
-where idusuario =".$id;
+where iduser =".$id;
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function eliminarUser($id) {
-$sql = "delete from user where idusuario =".$id;
+$sql = "delete from user where iduser =".$id;
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function traerUser() {
-$sql = "select idusuario,user,password,refroll,email,fullname from user order by 1";
+$sql = "select iduser,user,password,r.rol,email,fullname ,refroll
+		from user u 
+		inner join roles r on r.idrol = u.refroll
+		order by 1";
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function traerUserPorId($id) {
-$sql = "select idusuario,user,password,refroll,email,fullname from user where idusuario =".$id;
+$sql = "select iduser,user,password,refroll,email,fullname from user where iduser =".$id;
 $res = $this->query($sql,0);
 return $res;
 }
 
 /* Fin */
+
+
+/* PARA Roles */
+
+function insertarRoles($rol,$active) { 
+$sql = "insert into roles(idrol,rol,active) 
+values ('','".utf8_decode($rol)."',".$active.")"; 
+$res = $this->query($sql,1); 
+return $res; 
+} 
+
+
+function modificarRoles($id,$rol,$active) { 
+$sql = "update roles 
+set 
+rol = '".utf8_decode($rol)."',active = ".$active." 
+where idrol =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function eliminarRoles($id) { 
+$sql = "delete from roles where idrol =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerRoles() { 
+$sql = "select idrol,rol,active from roles order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerRolesPorId($id) { 
+$sql = "select idrol,rol,active from roles where idrol =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+/* Fin */
+
+/* PARA Responsible */
+
+function insertarResponsible($responsible) { 
+$sql = "insert into responsibles(idresponsible,responsible) 
+values ('','".utf8_decode($responsible)."')"; 
+$res = $this->query($sql,1); 
+return $res; 
+} 
+
+
+function modificarResponsible($id,$responsible) { 
+$sql = "update responsibles 
+set 
+responsible = '".utf8_decode($responsible)."' 
+where idresponsible =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function eliminarResponsible($id) { 
+$sql = "delete from responsibles where idresponsible =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerResponsible() { 
+$sql = "select idresponsible,responsible from responsibles order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerResponsiblePorId($id) { 
+$sql = "select idresponsible,responsible from responsibles where idresponsible =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+/* Fin */
+
 
 function query($sql,$accion) {
 		

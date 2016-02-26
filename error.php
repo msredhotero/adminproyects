@@ -1,3 +1,8 @@
+<?php
+session_start();
+session_destroy();
+
+?>
 <!DOCTYPE HTML>
 <html>
 
@@ -30,7 +35,7 @@
 
 
 
-<title>Gestión: Facturación - Cuentas Por Cobrar</title>
+<title>Management: System Project</title>
 
 
 
@@ -122,8 +127,8 @@
 	</div>
 	<div class="row" style="margin:10px;">
 
-    <h3>Debe iniciar sesion para acceder o no tiene permiso para entrar a esta sección.</h3>
-    <h4><a href="index.php">Iniciar Sesion</a></h4>
+    <h3>You must log in to access or do not have permission to enter this section.</h3>
+    <h4><a href="index.php">Log in</a></h4>
 <br>
     </div>
 

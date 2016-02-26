@@ -22,7 +22,7 @@ function GUID()
 
 function login($usuario,$pass) {
 	
-	$sqlusu = "select * from usuariosregistrados where email1 = '".$usuario."'";
+	$sqlusu = "select * from user where email = '".$usuario."'";
 
 
 
@@ -34,36 +34,34 @@ if (mysql_num_rows($respusu) > 0) {
 	$error = '';
 	
 	$idUsua = mysql_result($respusu,0,0);
-	$sqlpass = "select u.apellidoynombre,u.email1,u.nombreentidad,tu.descripcion, p.idperfil, u.idusuarioregistrado
-					FROM usuariosregistrados u 
+	$sqlpass = "select u.fullname,u.email,u.user,r.rol, r.idrol, u.iduser
+					FROM user u 
 					inner
-					join	tipousuarios tu on tu.idtipousuario = u.reftipousuario
-					inner
-					join	perfiles p on p.reftipousuario = tu.idtipousuario
-					where   u.password = '".$pass."' and u.idusuarioregistrado = ".$idUsua;
+					join	roles r on r.idrol = u.refroll
+					where   u.password = '".$pass."' and u.iduser = ".$idUsua;
 
 	$resppass = $this->query($sqlpass,0);
 	
 	if (mysql_num_rows($resppass) > 0) {
 		$error = '';
 		} else {
-			$error = 'Usuario o Password incorrecto';
+			$error = 'Username or Password incorrect';
 		}
 	
 	}
 	else
 	
 	{
-		$error = 'Usuario o Password incorrecto';	
+		$error = 'Username or Password incorrect';	
 	}
 	
 	if ($error == '') {
 		session_start();
-		$_SESSION['usua_predio'] = $usuario;
-		$_SESSION['nombre_predio'] = mysql_result($resppass,0,0);
-		$_SESSION['email_predio'] = mysql_result($resppass,0,1);
-		$_SESSION['refroll_predio'] = mysql_result($resppass,0,3);
-		$_SESSION['idroll_predio'] = mysql_result($resppass,0,4);
+		$_SESSION['usua_p'] = $usuario;
+		$_SESSION['nombre_p'] = mysql_result($resppass,0,0);
+		$_SESSION['email_p'] = mysql_result($resppass,0,1);
+		$_SESSION['refroll_p'] = mysql_result($resppass,0,3);
+		$_SESSION['idroll_p'] = mysql_result($resppass,0,4);
 		$_SESSION['idusuario'] = mysql_result($resppass,0,5);
 		
 		
@@ -83,7 +81,7 @@ if (mysql_num_rows($respusu) > 0) {
 	}
 	
 }	else {
-	$error = 'Usuario y Password son campos obligatorios';	
+	$error = 'Username and Password are required fields';	
 }
 	
 	
