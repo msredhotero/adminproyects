@@ -48,25 +48,15 @@ $tituloWeb = "Management: System Project";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "proyects";
 
-$lblCambio	 	= array("refemployee","refresponsible","refstate");
-$lblreemplazo	= array("Users","Responsible","States");
+$lblCambio	 	= array("commission","refresponsible","refstate","order");
+$lblreemplazo	= array("Percentage of Commission","Responsible","States","Number Order");
 
 
-$resEmp 	= $serviciosProyects->traerUser();
-$cadRef = '';
-while ($rowTT = mysql_fetch_array($resEmp)) {
-	if (mysql_result($resResultado,0,'refemployee') == $rowTT[0]) {
-		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
-	} else {
-		$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
-	}
-	
-}
 
 $resResp 	= $serviciosProyects->traerResponsible();
 $cadRef2 = '';
 while ($rowTT2 = mysql_fetch_array($resResp)) {
-	if (mysql_result($resResultado,0,'refemployee') == $rowTT[0]) {
+	if (mysql_result($resResultado,0,'refresponsible') == $rowTT2[0]) {
 		$cadRef2 = $cadRef2.'<option value="'.$rowTT2[0].'">'.utf8_encode($rowTT2[1]).'</option>';
 	} else {
 		$cadRef2 = $cadRef2.'<option value="'.$rowTT2[0].'">'.utf8_encode($rowTT2[1]).'</option>';
@@ -77,7 +67,7 @@ while ($rowTT2 = mysql_fetch_array($resResp)) {
 $resState 	= $serviciosProyects->traerState();
 $cadRef3 = '';
 while ($rowTT3 = mysql_fetch_array($resState)) {
-	if (mysql_result($resResultado,0,'refemployee') == $rowTT3[0]) {
+	if (mysql_result($resResultado,0,'refstate') == $rowTT3[0]) {
 		$cadRef3 = $cadRef3.'<option value="'.$rowTT3[0].'">'.utf8_encode($rowTT3[1]).'</option>';
 	} else {
 		$cadRef3 = $cadRef3.'<option value="'.$rowTT3[0].'">'.utf8_encode($rowTT3[1]).'</option>';
@@ -85,11 +75,43 @@ while ($rowTT3 = mysql_fetch_array($resState)) {
 	
 }
 
-$refdescripcion = array(0 => $cadRef,1=> $cadRef2, 2=> $cadRef3);
-$refCampo 	=  array("refemployee","refresponsible","refstate");
+$refdescripcion = array(0=> $cadRef2, 1=> $cadRef3);
+$refCampo 	=  array("refresponsible","refstate");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+/////////////////// Fechas para Suspender ///////////////////////
 
+$resUser = $serviciosProyects->traerUser();
+
+$resUserProyect = $serviciosProyects->traerProyectEmployeesPorProyect($id);
+
+
+	while ($subrow = mysql_fetch_array($resUserProyect)) {
+			$arrayFS[] = $subrow;
+	}
+
+
+
+$cadUser = '<ul class="list-inline">';
+while ($rowFS = mysql_fetch_array($resUser)) {
+	$check = '';
+	if (mysql_num_rows($resUserProyect)>0) {
+		foreach ($arrayFS as $item) {
+			if (stripslashes($item['iduser']) == $rowFS[0]) {
+				$check = 'checked';	
+			}
+		}
+	}
+	$cadUser = $cadUser."<li>".'<input id="user'.$rowFS[0].'" '.$check.' class="form-control" type="checkbox" required="" style="width:50px;" name="user'.$rowFS[0].'"><p>'.$rowFS[1].'</p>'."</li>";
+
+
+}
+
+
+
+$cadUser = $cadUser."</ul>";
+
+/////////////////////////////////////////////////////////////////
 
 
 
@@ -176,6 +198,14 @@ if ($_SESSION['refroll_p'] != 1) {
 			<?php echo $formulario; ?>
             </div>
             
+            <div class="row">
+            	<div class="form-group col-md-12">
+                	<label class="control-label" style="text-align:left" for="fechas">Select Users</label>
+                    <div class="input-group col-md-12">
+                    	<?php echo $cadUser; ?>
+                    </div>
+                </div>
+            </div>
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>

@@ -41,16 +41,17 @@ $tituloWeb = "Management: System Project";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "proyects";
 
-$lblCambio	 	= array("refemployee","refresponsible","refstate");
-$lblreemplazo	= array("Users","Responsible","States");
+$lblCambio	 	= array("commission","refresponsible","refstate","order");
+$lblreemplazo	= array("Percentage of Commission","Responsible","States","Number Order");
 
 
 $resEmp 	= $serviciosProyects->traerUser();
-$cadRef = '';
-while ($rowTT = mysql_fetch_array($resEmp)) {
-	$cadRef = $cadRef.'<option value="'.$rowTT[0].'">'.utf8_encode($rowTT[1]).'</option>';
-	
+
+$cadRef = '<ul class="list-inline">';
+while ($rowFS = mysql_fetch_array($resEmp)) {
+	$cadRef = $cadRef."<li>".'<input id="user'.$rowFS[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="user'.$rowFS[0].'"><p>'.$rowFS[1].'</p>'."</li>";
 }
+$cadRef = $cadRef."</ul>";
 
 $resResp 	= $serviciosProyects->traerResponsible();
 $cadRef2 = '';
@@ -76,9 +77,10 @@ $refCampo 	=  array("refemployee","refresponsible","refstate");
 /////////////////////// Opciones para la creacion del view  /////////////////////
 $cabeceras 		= "	<th>Title</th>
 					<th>Price</th>
-					<th>User</th>
 					<th>Responsible</th>
 					<th>State</th>
+					<th>Order</th>
+					<th>Commission</th>
 					<th>Observation</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
@@ -88,7 +90,7 @@ $cabeceras 		= "	<th>Title</th>
 
 $formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyects->traerProyects(),6);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyects->traerProyects(),98);
 
 
 
@@ -170,6 +172,15 @@ if ($_SESSION['refroll_p'] != 1) {
 			<?php echo $formulario; ?>
             </div>
             
+            <div class="row">
+            	<div class="form-group col-md-12">
+                	<label class="control-label" style="text-align:left" for="fechas">Select Users</label>
+                    <div class="input-group col-md-12">
+                    	<?php echo $cadRef; ?>
+                    </div>
+                </div>
+            </div>
+            
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
                 
@@ -211,6 +222,25 @@ if ($_SESSION['refroll_p'] != 1) {
 
 
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Users assigned to the project</h4>
+      </div>
+      <div class="modal-body userasignates">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="dialog2" title="Eliminar <?php echo $singular; ?>">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
@@ -225,8 +255,32 @@ if ($_SESSION['refroll_p'] != 1) {
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#example').dataTable();
-	
+	/*userasignates*/
+	$("#example").on("click",'.varver', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
 
+			$.ajax({
+					data:  {id: usersid, accion: 'traerUserbyProyect'},
+					url:   '../../ajax/ajax.php',
+					type:  'post',
+					beforeSend: function () {
+							
+					},
+					success:  function (response) {
+							$('.userasignates').html(response);
+							
+					}
+			});
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton eliminar
+	
+	
 	$("#example").on("click",'.varborrar', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {

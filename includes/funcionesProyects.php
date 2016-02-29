@@ -52,23 +52,105 @@ return $res;
 /* End */
 
 
+/* PARA ProyectEmployees */
+
+function insertarProyectEmployees($refproyect,$refemployee) {
+$sql = "insert into proyectemployees(idproyectemployee,refproyect,refemployee)
+values ('',".$refproyect.",".$refemployee.")";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarProyectEmployees($id,$refproyect,$refemployee) {
+$sql = "update proyectemployees
+set
+refproyect = ".$refproyect.",refemployee = ".$refemployee."
+where idproyectemployee =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarProyectEmployees($id) {
+$sql = "delete from proyectemployees where idproyectemployee =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarProyectEmployeesPorProyect($proyect) {
+$sql = "delete from proyectemployees where refproyect =".$proyect;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerProyectEmployees() {
+$sql = "select 
+			idproyectemployee,e.lastname,e.firstname,e.id,p.title,pe.refproyect,pe.refemployee 
+		from proyectemployees pe
+		inner join employees e ON e.idemployee = pe.refemployee
+		inner join proyects p ON p.idproyect = pe.refproyect
+		order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerProyectEmployeesPorUser($user) {
+$sql = "select 
+			idproyectemployee,e.lastname,e.firstname,e.id,p.title,pe.refproyect,pe.refemployee 
+		from proyectemployees pe
+		inner join employees e ON e.idemployee = pe.refemployee
+		inner join proyects p ON p.idproyect = pe.refproyect
+		inner join user u on u.iduser = pe.refemployee
+		inner join responsibles r on r.idresponsible = p.refresponsible
+		inner join states s on s.idstate = p.refstate
+		where u.iduser = ".$idUser."
+		order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerProyectEmployeesPorProyect($proyect) {
+$sql = "select 
+			idproyectemployee,e.user,e.fullname,p.title,pe.refproyect,pe.refemployee,e.iduser 
+		from proyectemployees pe
+		inner join user e ON e.iduser = pe.refemployee
+		inner join proyects p ON p.idproyect = pe.refproyect
+		where pe.refproyect = ".$proyect."
+		order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerProyectEmployeesPorId($id) {
+$sql = "select idproyectemployee,refproyect,refemployee from proyectemployees where idproyectemployee =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+/* Fin */
+
 /* PARA Proyects */
 
-function insertarProyects($title,$price,$refemployee,$refresponsible,$refstate,$observations) { 
-$sql = "insert into proyects(idproyect,title,price,refemployee,refresponsible,refstate,observations) 
-values ('','".utf8_decode($title)."',".$price.",".$refemployee.",".$refresponsible.",".$refstate.",'".utf8_decode($observations)."')"; 
-$res = $this->query($sql,1); 
-return $res; 
+function insertarProyects($title,$price,$refresponsible,$refstate,$order,$commission,$observations) {
+$sql = "insert into proyects(`idproyect`,`title`,`price`,`refresponsible`,`refstate`,`order`,`commission`,`observations`)
+values ('','".utf8_decode($title)."',".$price.",".$refresponsible.",".$refstate.",".$order.",".$commission.",'".utf8_decode($observations)."')";
+$res = $this->query($sql,1);
+return $res;
 } 
 
 
-function modificarProyects($id,$title,$price,$refemployee,$refresponsible,$refstate,$observations) { 
-$sql = "update proyects 
-set 
-title = '".utf8_decode($title)."',price = ".$price.",refemployee = ".$refemployee.",refresponsible = ".$refresponsible.",refstate = ".$refstate.",observations = '".utf8_decode($observations)."' 
-where idproyect =".$id; 
-$res = $this->query($sql,0); 
-return $res; 
+function modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations) {
+$sql = "update proyects
+set
+`title` = '".utf8_decode($title)."',`price` = ".$price.",`refresponsible` = ".$refresponsible.",`refstate` = ".$refstate.",`order` = ".$order.",`commission` = ".$commission.",`observations` = '".utf8_decode($observations)."'
+where idproyect =".$id;
+$res = $this->query($sql,0);
+return $res;
 } 
 
 
@@ -79,9 +161,8 @@ return $res;
 } 
 
 function traerProyects() { 
-$sql = "select idproyect,title,price,u.user,r.responsible,s.state,observations,refemployee,refresponsible ,refstate
+$sql = "select idproyect,title,price,r.responsible,s.state,p.order,p.commission,observations,refresponsible ,refstate
 		from proyects p 
-		inner join user u on u.iduser = p.refemployee
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
 		order by 1"; 
@@ -90,7 +171,7 @@ return $res;
 } 
 
 function traerProyectsPorUsuario($idUser) { 
-$sql = "select idproyect,title,price,u.user,r.responsible,s.state,observations,refemployee,refresponsible ,refstate
+$sql = "select idproyect,title,price,u.user,r.responsible,s.state,p.order,p.commission,observations,refemployee,refresponsible ,refstate
 		from proyects p 
 		inner join user u on u.iduser = p.refemployee
 		inner join responsibles r on r.idresponsible = p.refresponsible
@@ -103,7 +184,7 @@ return $res;
 
 
 function traerProyectsPorId($id) { 
-$sql = "select idproyect,title,price,refemployee,refresponsible,refstate,observations from proyects where idproyect =".$id; 
+$sql = "select idproyect,title,price,refresponsible,refstate,`order`,commission,observations from proyects where idproyect =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -282,7 +363,7 @@ function traerResponsiblePorId($id) {
 $sql = "select idresponsible,responsible from responsibles where idresponsible =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
-} 
+}
 
 /* Fin */
 

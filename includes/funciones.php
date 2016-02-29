@@ -21,10 +21,11 @@ class Servicios {
 				$idresultados = "resultados";
 				break;
 			case 98:
-				$cantidad = 3;
-				$classMod = 'varmodificarpredio';
-				$classEli = 'varborrarpredio';
-				$idresultados = "resultadospredio";
+				$cantidad = 7;
+				$classMod = 'varmodificar';
+				$classVer = 'varver';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
 				break;
 			case 97:
 				$cantidad = 3;
@@ -78,6 +79,10 @@ class Servicios {
 										   
 											<li>
 											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Update</a>
+											</li>
+											
+											<li>
+											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">View</a>
 											</li>
 										
 											<li>
@@ -253,18 +258,34 @@ class Servicios {
 				
 				if ($row[3] != 'PRI') {
 					if (strpos($row[1],"decimal") !== false) {
-						$form	=	$form.'
-						
-						<div class="form-group col-md-6">
-							<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
-							<div class="input-group col-md-12">
-								<span class="input-group-addon">$</span>
-								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="0" required>
-								<span class="input-group-addon">.00</span>
+						if ($row[0] == 'commission') {
+							$form	=	$form.'
+							
+							<div class="form-group col-md-6">
+								<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
+								<div class="input-group col-md-12">
+									<span class="input-group-addon">%</span>
+									<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="0" required>
+									<span class="input-group-addon">.00</span>
+								</div>
 							</div>
-						</div>
-						
-						';
+							
+							';
+
+						} else {
+							$form	=	$form.'
+							
+							<div class="form-group col-md-6">
+								<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
+								<div class="input-group col-md-12">
+									<span class="input-group-addon">$</span>
+									<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="0" required>
+									<span class="input-group-addon">.00</span>
+								</div>
+							</div>
+							
+							';
+						}
 					} else {
 						if ( in_array($row[0],$refCampo) ) {
 							
@@ -507,18 +528,34 @@ class Servicios {
 				
 				if ($row[3] != 'PRI') {
 					if (strpos($row[1],"decimal") !== false) {
-						$form	=	$form.'
-						
-						<div class="form-group col-md-6">
-							<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
-							<div class="input-group col-md-12">
-								<span class="input-group-addon">$</span>
-								<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" required>
-								<span class="input-group-addon">.00</span>
+						if ($row[0] == 'commission') {
+							$form	=	$form.'
+							
+							<div class="form-group col-md-6">
+								<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
+								<div class="input-group col-md-12">
+									<span class="input-group-addon">%</span>
+									<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" required>
+									<span class="input-group-addon">.00</span>
+								</div>
 							</div>
-						</div>
-						
-						';
+							
+							';
+						} else {
+							$form	=	$form.'
+							
+							<div class="form-group col-md-6">
+								<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
+								<div class="input-group col-md-12">
+									<span class="input-group-addon">$</span>
+									<input type="text" class="form-control" id="'.strtolower($row[0]).'" name="'.strtolower($row[0]).'" value="'.mysql_result($resMod,0,$row[0]).'" required>
+									<span class="input-group-addon">.00</span>
+								</div>
+							</div>
+							
+							';
+							
+						}
 					} else {
 						if ( in_array($row[0],$refCampo) ) {
 							

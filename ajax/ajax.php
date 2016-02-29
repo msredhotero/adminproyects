@@ -108,6 +108,9 @@ case 'eliminarProyects':
 eliminarProyects($serviciosProyect); 
 break; 
 
+case 'traerUserbyProyect':
+	traerUserbyProyect($serviciosProyect);
+	break;
 /* Fin */
 }
 
@@ -149,33 +152,54 @@ echo $res;
 
 /* PARA Proyects */
 function insertarProyects($serviciosProyect) { 
-$title = $_POST['title']; 
-$price = $_POST['price']; 
-$refemployee = $_POST['refemployee']; 
-$refresponsible = $_POST['refresponsible']; 
-$refstate = $_POST['refstate']; 
-$observations = $_POST['observations']; 
-$res = $serviciosProyect->insertarProyects($title,$price,$refemployee,$refresponsible,$refstate,$observations); 
-if ((integer)$res > 0) { 
-echo ''; 
-} else { 
-echo 'Huvo un error al insertar datos';	
-} 
+	$title = $_POST['title']; 
+	$price = $_POST['price']; 
+	$refresponsible = $_POST['refresponsible']; 
+	$refstate = $_POST['refstate']; 
+	$order = $_POST['order'];
+	$commission = $_POST['commission'];
+	$observations = $_POST['observations'];  
+	
+	$res = $serviciosProyect->insertarProyects($title,$price,$refresponsible,$refstate,$order,$commission,$observations); 
+	
+	if ((integer)$res > 0) { 
+		$resUser = $serviciosProyect->traerUser();
+		$cad = 'user';
+		while ($rowFS = mysql_fetch_array($resUser)) {
+			if (isset($_POST[$cad.$rowFS[0]])) {
+				$serviciosProyect->insertarProyectEmployees($res,$rowFS[0]);
+			}
+		}
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al insertar datos';	
+	} 
+	//echo $res;
 } 
 function modificarProyects($serviciosProyect) { 
-$id = $_POST['id']; 
-$title = $_POST['title']; 
-$price = $_POST['price']; 
-$refemployee = $_POST['refemployee']; 
-$refresponsible = $_POST['refresponsible']; 
-$refstate = $_POST['refstate']; 
-$observations = $_POST['observations']; 
-$res = $serviciosProyect->modificarProyects($id,$title,$price,$refemployee,$refresponsible,$refstate,$observations); 
-if ($res == true) { 
-echo ''; 
-} else { 
-echo 'Huvo un error al modificar datos'; 
-} 
+	$id = $_POST['id']; 
+	$title = $_POST['title']; 
+	$price = $_POST['price']; 
+	$refresponsible = $_POST['refresponsible']; 
+	$refstate = $_POST['refstate']; 
+	$order = $_POST['order'];
+	$commission = $_POST['commission'];
+	$observations = $_POST['observations']; 
+	
+	$res = $serviciosProyect->modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations); 
+	if ($res == true) { 
+		$serviciosProyect->eliminarProyectEmployeesPorProyect($id);
+			$resUser = $serviciosProyect->traerUser();
+			$cad = 'user';
+			while ($rowFS = mysql_fetch_array($resUser)) {
+				if (isset($_POST[$cad.$rowFS[0]])) {
+					$serviciosProyect->insertarProyectEmployees($id,$rowFS[0]);
+				}
+			}
+		echo ''; 
+	} else { 
+		echo 'Huvo un error al modificar datos'; 
+	} 
 } 
 function eliminarProyects($serviciosProyect) { 
 $id = $_POST['id']; 
@@ -183,6 +207,17 @@ $res = $serviciosProyect->eliminarProyects($id);
 echo $res; 
 } 
 
+
+function traerUserbyProyect($serviciosProyect) {
+	$id = $_POST['id']; 
+	
+	$res = $serviciosProyect->traerProyectEmployeesPorProyect($id);
+	$cadRef = '';
+	while ($row = mysql_fetch_array($res)) {
+		$cadRef .= "<p><span class='glyphicon glyphicon-user'></span> (".$row['user'].") ".$row['fullname']."</p>";
+	}
+	echo $cadRef;
+}
 /* Fin */
 
 

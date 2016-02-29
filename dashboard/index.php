@@ -41,9 +41,9 @@ $cabeceras 		= "	<th>Title</th>
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 if ($_SESSION['idroll_p'] != 1) {
-	$lstCargados 	= $serviciosFunciones->camposTablaViewNoAction($cabeceras,$serviciosProyect->traerProyectsPorUsuario($_SESSION['idusuario']),6);
+	$lstCargados 	= $serviciosFunciones->camposTablaViewNoAction($cabeceras,$serviciosProyect->traerProyectEmployeesPorUser($_SESSION['idusuario']),6);
 } else {
-	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyect->traerProyects(),6);
+	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyect->traerProyectEmployees(),6);
 }
 
 
