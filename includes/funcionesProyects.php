@@ -106,7 +106,7 @@ $sql = "select
 		inner join user u on u.iduser = pe.refemployee
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
-		where u.iduser = ".$idUser."
+		where u.iduser = ".$user."
 		order by 1";
 $res = $this->query($sql,0);
 return $res;
@@ -171,12 +171,12 @@ return $res;
 } 
 
 function traerProyectsPorUsuario($idUser) { 
-$sql = "select idproyect,title,price,u.user,r.responsible,s.state,p.order,p.commission,observations,refemployee,refresponsible ,refstate
+$sql = "select idproyect,title,price,r.responsible,s.state,p.order,p.commission,observations,refresponsible ,refstate
 		from proyects p 
-		inner join user u on u.iduser = p.refemployee
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
-		where u.iduser = ".$idUser."
+		inner join proyectemployees pe on pe.refproyect
+		where pe.refemployee = ".$idUser."
 		order by 1"; 
 $res = $this->query($sql,0); 
 return $res; 

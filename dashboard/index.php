@@ -33,17 +33,18 @@ $tituloWeb = "Management: System Project";
 /////////////////////// Opciones para la creacion del view  /////////////////////
 $cabeceras 		= "	<th>Title</th>
 					<th>Price</th>
-					<th>User</th>
 					<th>Responsible</th>
 					<th>State</th>
+					<th>Order</th>
+					<th>Commission</th>
 					<th>Observation</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 if ($_SESSION['idroll_p'] != 1) {
-	$lstCargados 	= $serviciosFunciones->camposTablaViewNoAction($cabeceras,$serviciosProyect->traerProyectEmployeesPorUser($_SESSION['idusuario']),6);
+	$lstCargados 	= $serviciosFunciones->camposTablaViewNoAction($cabeceras,$serviciosProyect->traerProyectsPorUsuario($_SESSION['idusuario']),98);
 } else {
-	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyect->traerProyectEmployees(),6);
+	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyect->traerProyects(),98);
 }
 
 
@@ -132,13 +133,54 @@ if ($_SESSION['idroll_p'] != 1) {
 
 </div>
 
-<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
-<script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Users assigned to the project</h4>
+      </div>
+      <div class="modal-body userasignates">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+<script src="../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#example').dataTable();
+	
+	$("#example").on("click",'.varver', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
 
+			$.ajax({
+					data:  {id: usersid, accion: 'traerUserbyProyect'},
+					url:   '../ajax/ajax.php',
+					type:  'post',
+					beforeSend: function () {
+							
+					},
+					success:  function (response) {
+							$('.userasignates').html(response);
+							
+					}
+			});
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton ver
 
 });
 </script>

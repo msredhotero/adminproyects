@@ -13,12 +13,14 @@ class Servicios {
 	function camposTablaView($cabeceras,$datos,$cantidad) {
 		$cadView = '';
 		$cadRows = '';
+		
 		switch ($cantidad) {
 			case 99:
 				$cantidad = 8;
 				$classMod = '';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
+				$classVer = '';
 				break;
 			case 98:
 				$cantidad = 7;
@@ -31,11 +33,13 @@ class Servicios {
 				$cantidad = 3;
 				$classMod = 'varmodificarprincipal';
 				$classEli = 'varborrarprincipal';
+				$classVer = '';
 				$idresultados = "resultadosprincipal";
 				break;
 			default:
 				$classMod = 'varmodificar';
 				$classEli = 'varborrar';
+				$classVer = '';
 				$idresultados = "resultados";
 		}
 		/*if ($cantidad == 99) {
@@ -79,13 +83,15 @@ class Servicios {
 										   
 											<li>
 											<a href="javascript:void(0)" class="'.$classMod.'" id="'.$row[0].'">Update</a>
-											</li>
-											
-											<li>
-											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">View</a>
-											</li>
+											</li>';
 										
-											<li>
+				if ($classVer != '') {
+					$cadRows = $cadRows.'		<li>
+											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">View</a>
+											</li>';	
+				}
+										
+				$cadRows = $cadRows.'		<li>
 											<a href="javascript:void(0)" class="'.$classEli.'" id="'.$row[0].'">Delete</a>
 											</li>
 											
@@ -145,28 +151,33 @@ class Servicios {
 	function camposTablaViewNoAction($cabeceras,$datos,$cantidad) {
 		$cadView = '';
 		$cadRows = '';
+		$cadsubRows = '';
 		switch ($cantidad) {
 			case 99:
 				$cantidad = 8;
 				$classMod = '';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
+				$classVer = '';
 				break;
 			case 98:
-				$cantidad = 3;
-				$classMod = 'varmodificarpredio';
-				$classEli = 'varborrarpredio';
-				$idresultados = "resultadospredio";
+				$cantidad = 7;
+				$classMod = 'varmodificar';
+				$classVer = 'varver';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
 				break;
 			case 97:
 				$cantidad = 3;
 				$classMod = 'varmodificarprincipal';
 				$classEli = 'varborrarprincipal';
+				$classVer = '';
 				$idresultados = "resultadosprincipal";
 				break;
 			default:
 				$classMod = 'varmodificar';
 				$classEli = 'varborrar';
+				$classVer = '';
 				$idresultados = "resultados";
 		}
 		/*if ($cantidad == 99) {
@@ -193,6 +204,31 @@ class Servicios {
 			}
 			
 			
+
+				$cadRows = $cadRows.'
+								'.$cadsubRows.'
+								<td>
+									
+									<div class="btn-group">
+										<button class="btn btn-success" type="button">Action</button>
+										
+										<button class="btn btn-success dropdown-toggle" data-toggle="dropdown" type="button">
+										<span class="caret"></span>
+										<span class="sr-only">Toggle Dropdown</span>
+										</button>
+										
+										<ul class="dropdown-menu" role="menu">
+										   
+											<li>
+											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">View</a>
+											</li>
+
+											
+										</ul>
+									</div>
+								</td>
+							</tr>
+				';
 			
 		}
 		
@@ -201,12 +237,12 @@ class Servicios {
             	<thead>
                 	<tr>
                     	'.$cabeceras.'
-                        
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="'.$idresultados.'">
 
-                	'.utf8_encode($cadsubRows).'
+                	'.utf8_encode($cadRows).'
                 </tbody>
             </table>
 			<div style="margin-bottom:85px; margin-right:60px;"></div>
