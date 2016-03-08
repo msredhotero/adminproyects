@@ -3,6 +3,9 @@
 require 'includes/funcionesUsuarios.php';
 include ('includes/funciones.php');
 
+session_start();
+session_destroy();
+
 $serviciosUsuarios = new ServiciosUsuarios();
 $servicios = new Servicios();
 
