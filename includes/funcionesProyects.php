@@ -161,7 +161,7 @@ return $res;
 } 
 
 function traerProyects() { 
-$sql = "select idproyect,title,price,r.responsible,s.state,p.order,p.commission,observations,refresponsible ,refstate
+$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,refresponsible ,refstate
 		from proyects p 
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
@@ -171,11 +171,11 @@ return $res;
 } 
 
 function traerProyectsPorUsuario($idUser) { 
-$sql = "select idproyect,title,price,r.responsible,s.state,p.order,p.commission,observations,refresponsible ,refstate
+$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,refresponsible ,refstate
 		from proyects p 
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
-		inner join proyectemployees pe on pe.refproyect
+		inner join proyectemployees pe on pe.refproyect = p.idproyect
 		where pe.refemployee = ".$idUser."
 		order by 1"; 
 $res = $this->query($sql,0); 

@@ -22,7 +22,7 @@ $serviciosProyects	 	= new ServiciosProyects();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"States",$_SESSION['refroll_p'],'');
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"Status",$_SESSION['refroll_p'],'');
 
 
 $id = $_GET['id'];
@@ -31,9 +31,9 @@ $resResultado = $serviciosProyects->traerStatePorId($id);
 
 
 /////////////////////// Opciones pagina ///////////////////////////////////////////////
-$singular = "State";
+$singular = "Status";
 
-$plural = "States";
+$plural = "Status";
 
 $eliminar = "eliminarState";
 
@@ -41,15 +41,15 @@ $modificar = "modificarState";
 
 $idTabla = "idstate";
 
-$tituloWeb = "Management: System Project";
+$tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "states";
 
-$lblCambio	 	= array("states");
-$lblreemplazo	= array("states");
+$lblCambio	 	= array("state");
+$lblreemplazo	= array("status");
 
 
 $cadRef = '';
@@ -182,7 +182,7 @@ if ($_SESSION['refroll_p'] != 1) {
 
 </div>
 
-<div id="dialog2" title="Eliminar <?php echo $singular; ?>">
+<div id="dialog2" title="Delete <?php echo $singular; ?>">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
             ¿Are you sure you want to delete the <?php echo $singular; ?>?.<span id="proveedorEli"></span>
@@ -224,7 +224,7 @@ $(document).ready(function(){
 				height:240,
 				modal: true,
 				buttons: {
-				    "Eliminar": function() {
+				    "Delete": function() {
 	
 						$.ajax({
 									data:  {id: $('#idEliminar').val(), accion: '<?php echo $eliminar; ?>'},
@@ -246,7 +246,7 @@ $(document).ready(function(){
 	       					},
 	       					1500);
 				    },
-				    Cancelar: function() {
+				    Cancel: function() {
 						$( this ).dialog( "close" );
 				    }
 				}

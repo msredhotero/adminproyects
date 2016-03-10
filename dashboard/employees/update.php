@@ -41,7 +41,7 @@ $modificar = "modificarEmployee";
 
 $idTabla = "idemployee";
 
-$tituloWeb = "Management: System Project";
+$tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 

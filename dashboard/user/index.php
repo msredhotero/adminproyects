@@ -34,7 +34,7 @@ $eliminar = "eliminarUser";
 
 $insertar = "insertarUser";
 
-$tituloWeb = "Management: System Project";
+$tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 
@@ -205,12 +205,12 @@ if ($_SESSION['refroll_p'] != 1) {
 
 
 </div>
-<div id="dialog2" title="Eliminar <?php echo $singular; ?>">
+<div id="dialog2" title="Delete <?php echo $singular; ?>">
     	<p>
         	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
-            ¿Esta seguro que desea eliminar el <?php echo $singular; ?>?.<span id="proveedorEli"></span>
+            ¿Are you sure you want to delete the <?php echo $singular; ?>?.<span id="proveedorEli"></span>
         </p>
-        <p><strong>Importante: </strong>Si elimina el <?php echo $singular; ?> se perderan todos los datos de este</p>
+        <p><strong>Important: </strong>If you delete the <?php echo $singular; ?> will lose all data in this</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
@@ -254,7 +254,7 @@ $(document).ready(function(){
 				height:240,
 				modal: true,
 				buttons: {
-				    "Eliminar": function() {
+				    "Delete": function() {
 	
 						$.ajax({
 									data:  {id: $('#idEliminar').val(), accion: '<?php echo $eliminar; ?>'},
@@ -276,7 +276,7 @@ $(document).ready(function(){
 	       					},
 	       					1500);
 				    },
-				    Cancelar: function() {
+				    Cancel: function() {
 						$( this ).dialog( "close" );
 				    }
 				}

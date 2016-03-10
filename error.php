@@ -35,7 +35,7 @@ session_destroy();
 
 
 
-<title>Management: System Project</title>
+<title>Restricted access: B-Projects</title>
 
 
 

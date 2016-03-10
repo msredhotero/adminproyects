@@ -23,7 +23,7 @@ $servicios = new Servicios();
 
 
 
-<title>Restricted access: Project Management System</title>
+<title>Restricted access: B-Projects</title>
 
 
 
@@ -174,7 +174,7 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
             </div>
 
             <div align="center">
-            	<img src="imagenes/2723396196_f8b6dfd49d.jpg" width="15%" height="15%">
+            	<img src="imagenes/LOGO_BINARY.png" width="40%" height="40%">
 				<div align="center"><p style="color:#363636; font-size:28px;">Access to the control panel</p></div>
                 <br>
             </div>

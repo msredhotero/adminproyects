@@ -54,7 +54,7 @@ function menu($usuario,$titulo,$rol,$empresa) {
 	
 		<div id="navigation" >
 			<div align="center">
-			<img src="../imagenes/caracol_bg.png"/ style="padding-bottom:5%;" width="40%">
+			<img src="../imagenes/caracol_bg.png"/ style="padding-bottom:5%;" width="70%">
 			</div>
 				<nav class="nav">
 					<ul>

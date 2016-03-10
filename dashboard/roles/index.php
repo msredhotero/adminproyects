@@ -34,7 +34,7 @@ $eliminar = "eliminarPerfiles";
 
 $insertar = "insertarPerfiles";
 
-$tituloWeb = "Gestión: Caracol Bienes Raíces";
+$tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 

@@ -34,7 +34,7 @@ $eliminar = "eliminarEmployee";
 
 $insertar = "insertarEmployee";
 
-$tituloWeb = "Management: System Project";
+$tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 

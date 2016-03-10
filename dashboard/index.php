@@ -27,15 +27,15 @@ $resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"Dashboard",$
 
 /////////////////////// Opciones pagina ///////////////////////////////////////////////
 
-$tituloWeb = "Management: System Project";
+$tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Title</th>
+$cabeceras 		= "	<th>Order</th>
+					<th>Title</th>
 					<th>Price</th>
 					<th>Responsible</th>
 					<th>State</th>
-					<th>Order</th>
 					<th>Commission</th>
 					<th>Observation</th>";
 
@@ -151,13 +151,100 @@ if ($_SESSION['idroll_p'] != 1) {
   </div>
 </div>
 
+<?php
+	
+if ($_SESSION['idroll_p'] == 1) {
+	
+?>
+<div id="dialog2" title="Delete Project">
+    	<p>
+        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            ¿Are you sure you want to delete the Project?.<span id="proveedorEli"></span>
+        </p>
+        <p><strong>Important: </strong>If you delete the Project will lose all data in this</p>
+        <input type="hidden" value="" id="idEliminar" name="idEliminar">
+</div>
+<?php
+}
+?>
+
 <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
 <script src="../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#example').dataTable();
+<?php
 	
+if ($_SESSION['idroll_p'] == 1) {
+	
+?>
+	$("#example").on("click",'.varborrar', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			$("#idEliminar").val(usersid);
+			$("#dialog2").dialog("open");
+
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton eliminar
+	
+	$("#example").on("click",'.varmodificar', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			
+			url = "proyects/update.php?id=" + usersid;
+			$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton modificar
+
+	 $( "#dialog2" ).dialog({
+		 	
+			    autoOpen: false,
+			 	resizable: false,
+				width:600,
+				height:240,
+				modal: true,
+				buttons: {
+				    "Delete": function() {
+	
+						$.ajax({
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarProyects'},
+									url:   '../ajax/ajax.php',
+									type:  'post',
+									beforeSend: function () {
+											
+									},
+									success:  function (response) {
+											url = "index.php";
+											$(location).attr('href',url);
+											
+									}
+							});
+						$( this ).dialog( "close" );
+						$( this ).dialog( "close" );
+							$('html, body').animate({
+	           					scrollTop: '1000px'
+	       					},
+	       					1500);
+				    },
+				    Cancel: function() {
+						$( this ).dialog( "close" );
+				    }
+				}
+		 
+		 
+	 		}); //fin del dialogo para eliminar
+<?php
+}
+?>
+			
 	$("#example").on("click",'.varver', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
