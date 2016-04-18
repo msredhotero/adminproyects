@@ -2,7 +2,7 @@
 
 include ('../includes/funcionesUsuarios.php');
 include ('../includes/funcionesProyects.php');
-
+include ('../includes/funcionesTasks.php');
 
 $serviciosUsuarios  = new ServiciosUsuarios();
 $serviciosProyect  = new ServiciosProyects();
@@ -111,6 +111,19 @@ break;
 case 'traerUserbyProyect':
 	traerUserbyProyect($serviciosProyect);
 	break;
+/* Fin */
+
+/* PARA Tasks */
+case 'insertarTasks':
+insertarTasks($serviciosTasks);
+break;
+case 'modificarTasks':
+modificarTasks($serviciosTasks);
+break;
+case 'eliminarTasks':
+eliminarTasks($serviciosTasks);
+break;
+
 /* Fin */
 }
 
@@ -317,6 +330,51 @@ echo $res;
 
 /* Fin */
 
+
+
+/* PARA Tasks */
+function insertarTasks($serviciosTasks) {
+$task = $_POST['task'];
+$order = $_POST['order'];
+$value = $_POST['value'];
+if (isset($_POST['active'])) {
+$active = 1;
+} else {
+$active = 0;
+}
+$refproject = $_POST['refproject'];
+$res = $serviciosTasks->insertarTasks($task,$order,$value,$active,$refproject);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarTasks($serviciosTasks) {
+$id = $_POST['id'];
+$task = $_POST['task'];
+$order = $_POST['order'];
+$value = $_POST['value'];
+if (isset($_POST['active'])) {
+$active = 1;
+} else {
+$active = 0;
+}
+$refproject = $_POST['refproject'];
+$res = $serviciosTasks->modificarTasks($id,$task,$order,$value,$active,$refproject);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarTasks($serviciosTasks) {
+$id = $_POST['id'];
+$res = $serviciosTasks->eliminarTasks($id);
+echo $res;
+}
+
+/* Fin */ 
 
 /////////////////////////////////////////////////////***** FIN **********/////////////////////////////////////////////////////
 

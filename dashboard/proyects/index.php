@@ -181,6 +181,123 @@ if ($_SESSION['refroll_p'] != 1) {
                 </div>
             </div>
             
+            <div class="row" style="margin-left:25px; margin-right:25px;">
+                	<h4>Agregar Imagenes/Archivos</h4>
+                        <p style=" color: #999;">Imagenes/Archivos (no más de 3 mb por archivo)</p>
+                        <div style="height:auto; 
+                    			width:100%; 
+                                background-color:#FFF;
+                                -webkit-border-radius: 13px; 
+                            	-moz-border-radius: 13px;
+                            	border-radius: 13px;
+                                margin-left:-20px;
+                                padding-left:20px;">
+
+                            
+			<ul class="list-inline">
+                        <li style="margin-top:14px;">
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen1" id="imagen1">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            
+                            <img id="vistaPrevia1" name="vistaPrevia1" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen2" id="imagen2">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia2" name="vistaPrevia2" width="50" height="50"/>
+                        </div>
+
+                            
+                        </li>
+                        <li style="margin-top:14px;">
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen4" id="imagen4">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia4" name="vistaPrevia4" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen5" id="imagen5">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia5" name="vistaPrevia5" width="50" height="50"/>
+                        </div>
+                        
+                        </li>
+                        
+                        <li>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen3" id="imagen3">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia3" name="vistaPrevia3" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen6" id="imagen6">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia6" name="vistaPrevia6" width="50" height="50"/>
+                        </div>
+                        </li>
+                        
+                        
+                        <li>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen7" id="imagen7">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia7" name="vistaPrevia7" width="50" height="50"/>
+                        </div>
+                        <div style="height:14px;">
+                            
+                        </div>
+                        <div style=" height:110px; width:140px; border:2px dashed #CCC; text-align:center; overflow: auto;">
+                            <div class='custom-input-file'>
+                                <input type="file" name="imagen8" id="imagen8">
+                                <img src="../../imagenes/clip20.jpg">
+                                <div class="files">...</div>
+                            </div>
+                            <img id="vistaPrevia8" name="vistaPrevia8" width="50" height="50"/>
+                        </div>
+                        </li>
+                        
+                        
+                        </ul>
+                        
+                        
+                        
+                        
+                        
+                        
+                       
+            </div>
+            
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
                 
@@ -409,6 +526,135 @@ $(document).ready(function(){
 			});
 		}
     });
+	
+	$('#imagen1').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia1').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	$('#imagen2').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia2').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	$('#imagen3').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia3').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	$('#imagen4').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia4').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	
+	$('#imagen5').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia5').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	$('#imagen6').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia6').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	$('#imagen7').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia7').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
+	
+	$('#imagen8').on('change', function(e) {
+	  var Lector,
+		  oFileInput = this;
+	 
+	  if (oFileInput.files.length === 0) {
+		return;
+	  };
+	 
+	  Lector = new FileReader();
+	  Lector.onloadend = function(e) {
+		$('#vistaPrevia8').attr('src', e.target.result);         
+	  };
+	  Lector.readAsDataURL(oFileInput.files[0]);
+	 
+	});
 
 });
 </script>

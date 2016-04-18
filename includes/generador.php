@@ -33,9 +33,9 @@ function query($sql,$accion) {
 }
 
 
-$tabla 		= "proyects";
-$nombre 	= "Proyects";
-$servicios	= "Proyect";
+$tabla 		= "tasks";
+$nombre 	= "Tasks";
+$servicios	= "Tasks";
 
 $sql	=	"show columns from ".$tabla;
 $res 	=	query($sql,0);
