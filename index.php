@@ -174,7 +174,7 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
             </div>
 
             <div align="center">
-            	<img src="imagenes/LOGO_BINARY.png" width="40%" height="40%">
+            	<img src="imagenes/ga_bg.png" width="50%" height="50%">
 				<div align="center"><p style="color:#363636; font-size:28px;">Access to the control panel</p></div>
                 <br>
             </div>
@@ -212,7 +212,18 @@ background-color: #ffffff; border:1px solid #101010; box-shadow: 4px 4px 5px #46
                 <div id="load">
                 
                 </div>
-
+				
+				<div class="row" style="margin-bottom:-30px;">
+					<br>
+					<ul class="list-inline">
+						<li>
+							<p>powered Binary</p>
+						</li>
+						<li style="width:20%;">
+							<img src="imagenes/LOGO_BINARY_RGB_PEQUENO.jpg" width="100%" height="100%">
+						</li>
+					</ul>
+				</div>
             </form>
 
      </section>
