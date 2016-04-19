@@ -52,6 +52,9 @@ break;
 case 'eliminarProyect':
 eliminarProyect($serviciosProyect);
 break;
+case 'eliminarFoto':
+	eliminarFoto($serviciosProyect);
+	break;
 
 /* Fin */
 
@@ -173,7 +176,13 @@ function insertarProyects($serviciosProyect) {
 	$commission = $_POST['commission'];
 	$observations = $_POST['observations'];  
 	
-	$res = $serviciosProyect->insertarProyects($title,$price,$refresponsible,$refstate,$order,$commission,$observations); 
+	if (isset($_POST['sendemail'])) {
+		$sendemail = 1;
+	} else {
+		$sendemail = 0;
+	}
+	
+	$res = $serviciosProyect->insertarProyects($title,$price,$refresponsible,$refstate,$order,$commission,$observations,$sendemail); 
 	
 	if ((integer)$res > 0) { 
 		$resUser = $serviciosProyect->traerUser();
@@ -182,6 +191,19 @@ function insertarProyects($serviciosProyect) {
 			if (isset($_POST[$cad.$rowFS[0]])) {
 				$serviciosProyect->insertarProyectEmployees($res,$rowFS[0]);
 			}
+		}
+		
+		$imagenes = array("imagen1" => 'imagen1',
+						  "imagen2" => 'imagen2',
+						  "imagen3" => 'imagen3',
+						  "imagen4" => 'imagen4',
+						  "imagen5" => 'imagen5',
+						  "imagen6" => 'imagen6',
+						  "imagen7" => 'imagen7',
+						  "imagen8" => 'imagen8');
+	
+		foreach ($imagenes as $valor) {
+			$serviciosProyect->subirArchivo($valor,'galeria',$res);
 		}
 		echo ''; 
 	} else { 
@@ -199,7 +221,13 @@ function modificarProyects($serviciosProyect) {
 	$commission = $_POST['commission'];
 	$observations = $_POST['observations']; 
 	
-	$res = $serviciosProyect->modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations); 
+	if (isset($_POST['sendemail'])) {
+		$sendemail = 1;
+	} else {
+		$sendemail = 0;
+	}
+	
+	$res = $serviciosProyect->modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations,$sendemail); 
 	if ($res == true) { 
 		$serviciosProyect->eliminarProyectEmployeesPorProyect($id);
 			$resUser = $serviciosProyect->traerUser();
@@ -208,6 +236,19 @@ function modificarProyects($serviciosProyect) {
 				if (isset($_POST[$cad.$rowFS[0]])) {
 					$serviciosProyect->insertarProyectEmployees($id,$rowFS[0]);
 				}
+			}
+			
+			$imagenes = array("imagen1" => 'imagen1',
+						  "imagen2" => 'imagen2',
+						  "imagen3" => 'imagen3',
+						  "imagen4" => 'imagen4',
+						  "imagen5" => 'imagen5',
+						  "imagen6" => 'imagen6',
+						  "imagen7" => 'imagen7',
+						  "imagen8" => 'imagen8');
+	
+			foreach ($imagenes as $valor) {
+				$serviciosProyect->subirArchivo($valor,'galeria',$id);
 			}
 		echo ''; 
 	} else { 
@@ -220,6 +261,10 @@ $res = $serviciosProyect->eliminarProyects($id);
 echo $res; 
 } 
 
+function eliminarFoto($serviciosProyect) {
+	$id			=	$_POST['id'];
+	echo $serviciosProyect->eliminarFoto($id);
+}
 
 function traerUserbyProyect($serviciosProyect) {
 	$id = $_POST['id']; 

@@ -125,7 +125,7 @@ function GUID()
 						$archivo = $this->sanear_string($_FILES[$file]["name"]);
 						$tipoarchivo = $_FILES[$file]["type"];
 						
-						if ($this->existeArchivo($idSocio,$archivo,$tipoarchivo) == 0) {
+						if ($this->existeArchivo($id,$archivo,$tipoarchivo) == 0) {
 							$sql	=	"insert into images(idfoto,refproyecto,imagen,type) values ('',".$id.",'".str_replace(' ','',$archivo)."','".$tipoarchivo."')";
 							$this->query($sql,1);
 						}
@@ -312,20 +312,26 @@ return $res;
 
 /* PARA Proyects */
 
-function insertarProyects($title,$price,$refresponsible,$refstate,$order,$commission,$observations) {
-$sql = "insert into proyects(`idproyect`,`title`,`price`,`refresponsible`,`refstate`,`order`,`commission`,`observations`)
-values ('','".utf8_decode($title)."',".$price.",".$refresponsible.",".$refstate.",".$order.",".$commission.",'".utf8_decode($observations)."')";
+function insertarProyects($title,$price,$refresponsible,$refstate,$order,$commission,$observations,$sendemail) {
+$sql = "insert into proyects(`idproyect`,`title`,`price`,`refresponsible`,`refstate`,`order`,`commission`,`observations`,`sendemail`)
+values ('','".utf8_decode($title)."',".$price.",".$refresponsible.",".$refstate.",".$order.",".$commission.",'".utf8_decode($observations)."',".$sendemail.")";
 $res = $this->query($sql,1);
 return $res;
 } 
 
 
-function modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations) {
+function modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations,$sendemail) {
 $sql = "update proyects
 set
-`title` = '".utf8_decode($title)."',`price` = ".$price.",`refresponsible` = ".$refresponsible.",`refstate` = ".$refstate.",`order` = ".$order.",`commission` = ".$commission.",`observations` = '".utf8_decode($observations)."'
+`title` = '".utf8_decode($title)."',`price` = ".$price.",`refresponsible` = ".$refresponsible.",`refstate` = ".$refstate.",`order` = ".$order.",`commission` = ".$commission.",`observations` = '".utf8_decode($observations)."',`sendemail` = ".$sendemail."
 where idproyect =".$id;
 $res = $this->query($sql,0);
+
+////////////////////     Auditoria   //////////////////
+
+
+//////////////////////////////////////////////////////
+
 return $res;
 } 
 
@@ -337,7 +343,7 @@ return $res;
 } 
 
 function traerProyects() { 
-$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,refresponsible ,refstate
+$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,sendemail,refresponsible ,refstate
 		from proyects p 
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
@@ -347,7 +353,7 @@ return $res;
 } 
 
 function traerProyectsPorUsuario($idUser) { 
-$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,refresponsible ,refstate
+$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,sendemail,refresponsible ,refstate
 		from proyects p 
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
@@ -360,7 +366,7 @@ return $res;
 
 
 function traerProyectsPorId($id) { 
-$sql = "select idproyect,title,price,refresponsible,refstate,`order`,commission,observations from proyects where idproyect =".$id; 
+$sql = "select idproyect,title,price,refresponsible,refstate,`order`,commission,observations,sendemail from proyects where idproyect =".$id; 
 $res = $this->query($sql,0); 
 return $res; 
 } 
@@ -543,6 +549,48 @@ return $res;
 
 /* Fin */
 
+
+/* PARA Audit */
+
+function insertarAudit($tabla,$idtabla,$idmodificado,$previousvalue,$newvalue,$dateupdate,$user,$action) { 
+$sql = "insert into audit(idaudit,tabla,idtabla,idmodificado,previousvalue,newvalue,dateupdate,user,action) 
+values ('','".utf8_decode($tabla)."',".$idtabla.",".$idmodificado.",'".utf8_decode($previousvalue)."','".utf8_decode($newvalue)."','".utf8_decode($dateupdate)."','".utf8_decode($user)."','".utf8_decode($action)."')"; 
+$res = $this->query($sql,1); 
+return $res; 
+} 
+
+
+function modificarAudit($id,$tabla,$idtabla,$idmodificado,$previousvalue,$newvalue,$dateupdate,$user,$action) { 
+$sql = "update audit 
+set 
+tabla = '".utf8_decode($tabla)."',idtabla = ".$idtabla.",idmodificado = ".$idmodificado.",previousvalue = '".utf8_decode($previousvalue)."',newvalue = '".utf8_decode($newvalue)."',dateupdate = '".utf8_decode($dateupdate)."',user = '".utf8_decode($user)."',action = '".utf8_decode($action)."' 
+where idaudit =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function eliminarAudit($id) { 
+$sql = "delete from audit where idaudit =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerAudit() { 
+$sql = "select idaudit,tabla,idtabla,idmodificado,previousvalue,newvalue,dateupdate,user,action from audit order by 1"; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+
+function traerAuditPorId($id) { 
+$sql = "select idaudit,tabla,idtabla,idmodificado,previousvalue,newvalue,dateupdate,user,action from audit where idaudit =".$id; 
+$res = $this->query($sql,0); 
+return $res; 
+} 
+
+/* Fin */
 
 function query($sql,$accion) {
 		

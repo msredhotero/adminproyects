@@ -23,7 +23,7 @@ class Servicios {
 				$classVer = '';
 				break;
 			case 98:
-				$cantidad = 7;
+				$cantidad = 8;
 				$classMod = 'varmodificar';
 				$classVer = 'varver';
 				$classEli = 'varborrar';

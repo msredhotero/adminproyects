@@ -41,8 +41,8 @@ $tituloWeb = "Restricted access: B-Projects";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "proyects";
 
-$lblCambio	 	= array("commission","refresponsible","refstate","order");
-$lblreemplazo	= array("Percentage of Commission","Responsible","Status","Number Order");
+$lblCambio	 	= array("commission","refresponsible","refstate","order","sendemail");
+$lblreemplazo	= array("Percentage of Commission","Responsible","Status","Number Order","Send email change of status");
 
 
 $resEmp 	= $serviciosProyects->traerUser();
@@ -81,7 +81,8 @@ $cabeceras 		= "	<th>Order</th>
 					<th>Responsible</th>
 					<th>State</th>
 					<th>Commission</th>
-					<th>Observation</th>";
+					<th>Observation</th>
+					<th>Send email</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -112,8 +113,6 @@ if ($_SESSION['refroll_p'] != 1) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-
 
 <title><?php echo $tituloWeb; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -182,8 +181,8 @@ if ($_SESSION['refroll_p'] != 1) {
             </div>
             
             <div class="row" style="margin-left:25px; margin-right:25px;">
-                	<h4>Agregar Imagenes/Archivos</h4>
-                        <p style=" color: #999;">Imagenes/Archivos (no más de 3 mb por archivo)</p>
+                	<h4>Add Images / Files</h4>
+                        <p style=" color: #999;">Images / Files (maximum file size per upload to 3 MB)</p>
                         <div style="height:auto; 
                     			width:100%; 
                                 background-color:#FFF;
