@@ -4,9 +4,9 @@ include ('../includes/funcionesUsuarios.php');
 include ('../includes/funcionesProyects.php');
 include ('../includes/funcionesTasks.php');
 
-$serviciosUsuarios  = new ServiciosUsuarios();
-$serviciosProyect  = new ServiciosProyects();
-
+$serviciosUsuarios 		= new ServiciosUsuarios();
+$serviciosProyect		= new ServiciosProyects();
+$serviciosTasks		 	= new ServiciosTasks();
 
 $accion = $_POST['accion'];
 
@@ -125,6 +125,19 @@ modificarTasks($serviciosTasks);
 break;
 case 'eliminarTasks':
 eliminarTasks($serviciosTasks);
+break;
+
+/* Fin */
+
+/* PARA CheckList */
+case 'insertarCheckList':
+insertarCheckList($serviciosTasks);
+break;
+case 'modificarCheckList':
+modificarCheckList($serviciosTasks);
+break;
+case 'eliminarCheckList':
+eliminarCheckList($serviciosTasks);
 break;
 
 /* Fin */
@@ -387,8 +400,8 @@ $active = 1;
 } else {
 $active = 0;
 }
-$refproject = $_POST['refproject'];
-$res = $serviciosTasks->insertarTasks($task,$order,$value,$active,$refproject);
+$refuser = $_POST['refuser'];
+$res = $serviciosTasks->insertarTasks($task,$order,$value,$active,$refuser);
 if ((integer)$res > 0) {
 echo '';
 } else {
@@ -405,8 +418,8 @@ $active = 1;
 } else {
 $active = 0;
 }
-$refproject = $_POST['refproject'];
-$res = $serviciosTasks->modificarTasks($id,$task,$order,$value,$active,$refproject);
+$refuser = $_POST['refuser'];
+$res = $serviciosTasks->modificarTasks($id,$task,$order,$value,$active,$refuser);
 if ($res == true) {
 echo '';
 } else {
@@ -416,6 +429,72 @@ echo 'Huvo un error al modificar datos';
 function eliminarTasks($serviciosTasks) {
 $id = $_POST['id'];
 $res = $serviciosTasks->eliminarTasks($id);
+echo $res;
+}
+
+/* Fin */ 
+
+/* PARA CheckList */
+function insertarCheckList($serviciosTasks) {
+$refproject = $_POST['refproject'];
+$refuser = $_POST['refuser'];
+$enddate = $_POST['enddate'];
+$alarm = $_POST['alarm'];
+$refstatechecklist = $_POST['refstatechecklist'];
+if (isset($_POST['executed'])) {
+$executed = 1;
+} else {
+$executed = 0;
+}
+if (isset($_POST['timelimitfinished'])) {
+$timelimitfinished = 1;
+} else {
+$timelimitfinished = 0;
+}
+if (isset($_POST['executedincomplete'])) {
+$executedincomplete = 1;
+} else {
+$executedincomplete = 0;
+}
+$res = $serviciosTasks->insertarCheckList($refproject,$refuser,$enddate,$alarm,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarCheckList($serviciosTasks) {
+$id = $_POST['id'];
+$refproject = $_POST['refproject'];
+$refuser = $_POST['refuser'];
+$enddate = $_POST['enddate'];
+$alarm = $_POST['alarm'];
+$refstatechecklist = $_POST['refstatechecklist'];
+if (isset($_POST['executed'])) {
+$executed = 1;
+} else {
+$executed = 0;
+}
+if (isset($_POST['timelimitfinished'])) {
+$timelimitfinished = 1;
+} else {
+$timelimitfinished = 0;
+}
+if (isset($_POST['executedincomplete'])) {
+$executedincomplete = 1;
+} else {
+$executedincomplete = 0;
+}
+$res = $serviciosTasks->modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarCheckList($serviciosTasks) {
+$id = $_POST['id'];
+$res = $serviciosTasks->eliminarCheckList($id);
 echo $res;
 }
 

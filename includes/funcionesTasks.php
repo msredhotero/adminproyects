@@ -16,18 +16,18 @@ class ServiciosTasks {
 
 /* PARA Tasks */
 
-function insertarTasks($task,$order,$value,$active,$refproject) {
-$sql = "insert into tasks(idtask,task,order,value,active,refproject)
-values ('','".utf8_decode($task)."',".$order.",".$value.",".$active.",".$refproject.")";
+function insertarTasks($task,$order,$value,$active,$refuser) {
+$sql = "insert into tasks(idtask,task,`order`,value,active,refuser)
+values ('','".utf8_decode($task)."',".$order.",".$value.",".$active.",".$refuser.")";
 $res = $this->query($sql,1);
 return $res;
 }
 
 
-function modificarTasks($id,$task,$order,$value,$active,$refproject) {
+function modificarTasks($id,$task,$order,$value,$active,$refuser) {
 $sql = "update tasks
 set
-task = '".utf8_decode($task)."',order = ".$order.",value = ".$value.",active = ".$active.",refproject = ".$refproject."
+task = '".utf8_decode($task)."',`order` = ".$order.",value = ".$value.",active = ".$active.",refuser = ".$refuser."
 where idtask =".$id;
 $res = $this->query($sql,0);
 return $res;
@@ -42,14 +42,121 @@ return $res;
 
 
 function traerTasks() {
-$sql = "select idtask,task,order,value,active,refproject from tasks order by 1";
+$sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser from tasks order by `order` ";
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function traerTasksPorId($id) {
-$sql = "select idtask,task,order,value,active,refproject from tasks where idtask =".$id;
+$sql = "select idtask,task,`order`,value,active,refuser from tasks where idtask =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerTasksByUser($idUser) {
+$sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser 
+		from tasks 
+		where refuser = ".$idUser."
+		order by `order`  ";
+$res = $this->query($sql,0);
+return $res;
+}
+
+/* Fin */
+
+/* PARA StateCheckList */
+function insertarStateCheckList($serviciosTasks) {
+$status = $_POST['status'];
+if (isset($_POST['active'])) {
+$active = 1;
+} else {
+$active = 0;
+}
+$res = $serviciosTasks->insertarStateCheckList($status,$active);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarStateCheckList($serviciosTasks) {
+$id = $_POST['id'];
+$status = $_POST['status'];
+if (isset($_POST['active'])) {
+$active = 1;
+} else {
+$active = 0;
+}
+$res = $serviciosTasks->modificarStateCheckList($id,$status,$active);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarStateCheckList($serviciosTasks) {
+$id = $_POST['id'];
+$res = $serviciosTasks->eliminarStateCheckList($id);
+echo $res;
+}
+
+function traerStateCheckList() {
+$sql = "select idstatechecklist,status,active from statechecklist order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerStateCheckListPorId($id) {
+$sql = "select idstatechecklist,status,active from statechecklist where idstatechecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+} 
+/* Fin */ 
+
+/* PARA CheckList */
+
+function insertarCheckList($refproject,$refuser,$enddate,$alarm,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
+$sql = "insert into checklist(idchecklist,refproject,refuser,enddate,alarm,refstatechecklist,executed,timelimitfinished,executedincomplete)
+values ('',".$refproject.",".$refuser.",'".utf8_decode($enddate)."','".utf8_decode($alarm)."',".$refstatechecklist.",".$executed.",".$timelimitfinished.",".$executedincomplete.")";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
+$sql = "update checklist
+set
+refproject = ".$refproject.",refuser = ".$refuser.",enddate = '".utf8_decode($enddate)."',alarm = '".utf8_decode($alarm)."',refstatechecklist = ".$refstatechecklist.",executed = ".$executed.",timelimitfinished = ".$timelimitfinished.",executedincomplete = ".$executedincomplete."
+where idchecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarCheckList($id) {
+$sql = "delete from checklist where idchecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerCheckList() {
+$sql = "select idchecklist,refproject,refuser,enddate,alarm,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerCheckListPorId($id) {
+$sql = "select idchecklist,refproject,refuser,enddate,alarm,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist where idchecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerCheckListByUser($idUser) {
+$sql = "select idchecklist,refproject,refuser,enddate,alarm,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist where refuser =".$idUser;
 $res = $this->query($sql,0);
 return $res;
 }

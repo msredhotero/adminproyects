@@ -321,14 +321,54 @@ return $res;
 
 
 function modificarProyects($id,$title,$price,$refresponsible,$refstate,$order,$commission,$observations,$sendemail) {
+
+session_start();
+
+$resViejo = $this->traerProyectsPorId($id);
+
+$titleV 			=	mysql_result($resViejo,0,"title");
+$priceV 			=	mysql_result($resViejo,0,"price");
+$refresponsibleV 	=	mysql_result($resViejo,0,"refresponsible");
+$refstateV 			=	mysql_result($resViejo,0,"refstate");
+$orderV 			=	mysql_result($resViejo,0,"order");
+$commissionV 		=	mysql_result($resViejo,0,"commission"); 
+$observationsV 		=	mysql_result($resViejo,0,"observations"); 
+
 $sql = "update proyects
 set
 `title` = '".utf8_decode($title)."',`price` = ".$price.",`refresponsible` = ".$refresponsible.",`refstate` = ".$refstate.",`order` = ".$order.",`commission` = ".$commission.",`observations` = '".utf8_decode($observations)."',`sendemail` = ".$sendemail."
 where idproyect =".$id;
+
 $res = $this->query($sql,0);
 
 ////////////////////     Auditoria   //////////////////
+if ($titleV != $title) {
+	$this->insertarAudit("proyects",$id,"title",$titleV,$title,date('Y-m-d H:m:i'),	$_SESSION['nombre_p'],"update");
+}
 
+if ($priceV != $price) {
+	$this->insertarAudit("proyects",$id,"title",$priceV,$price,date('Y-m-d H:m:i'),	$_SESSION['nombre_p'],"update");
+}
+
+if ($refresponsibleV != $refresponsible) {
+	$this->insertarAudit("proyects",$id,"refresponsible",$refresponsibleV,$refresponsible,date('Y-m-d H:m:i'), $_SESSION['nombre_p'],"update");
+}
+
+if ($refstateV != $refstate) {
+	$this->insertarAudit("proyects",$id,"refstate",$refstateV,$refstate,date('Y-m-d H:m:i'), $_SESSION['nombre_p'],"update");
+}
+
+if ($orderV != $order) {
+	$this->insertarAudit("proyects",$id,"order",$orderV,$order,date('Y-m-d H:m:i'),	$_SESSION['nombre_p'],"update");
+}
+
+if ($commissionV != $commission) {
+	$this->insertarAudit("proyects",$id,"commission",$commissionV,$commission,date('Y-m-d H:m:i'), $_SESSION['nombre_p'],"update");
+}
+
+if ($observationsV != $observations) {
+	$this->insertarAudit("proyects",$id,"observations",$observationsV,$observations,date('Y-m-d H:m:i'), $_SESSION['nombre_p'],"update");
+}
 
 //////////////////////////////////////////////////////
 
@@ -552,9 +592,9 @@ return $res;
 
 /* PARA Audit */
 
-function insertarAudit($tabla,$idtabla,$idmodificado,$previousvalue,$newvalue,$dateupdate,$user,$action) { 
-$sql = "insert into audit(idaudit,tabla,idtabla,idmodificado,previousvalue,newvalue,dateupdate,user,action) 
-values ('','".utf8_decode($tabla)."',".$idtabla.",".$idmodificado.",'".utf8_decode($previousvalue)."','".utf8_decode($newvalue)."','".utf8_decode($dateupdate)."','".utf8_decode($user)."','".utf8_decode($action)."')"; 
+function insertarAudit($tabla,$idtabla,$campo,$previousvalue,$newvalue,$dateupdate,$user,$action) { 
+$sql = "insert into audit(idaudit,tabla,idtabla,campo,previousvalue,newvalue,dateupdate,user,action) 
+values ('','".utf8_decode($tabla)."',".$idtabla.",'".$campo."','".utf8_decode($previousvalue)."','".utf8_decode($newvalue)."','".utf8_decode($dateupdate)."','".utf8_decode($user)."','".utf8_decode($action)."')"; 
 $res = $this->query($sql,1); 
 return $res; 
 } 
