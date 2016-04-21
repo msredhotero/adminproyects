@@ -13,7 +13,8 @@ class Servicios {
 	function camposTablaView($cabeceras,$datos,$cantidad) {
 		$cadView = '';
 		$cadRows = '';
-		
+		$classTask = '';
+		$classVer = '';
 		switch ($cantidad) {
 			case 99:
 				$cantidad = 8;
@@ -42,6 +43,16 @@ class Servicios {
 				$classMod = 'varmodificar';
 				$classVer = 'varorder';
 				$lblVer	  = 'Change Order';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+				break;
+			case 95:
+				$cantidad = 9;
+				$classMod = 'varmodificar';
+				$classEditar = 'varver';
+				$lblEditar  = 'View';
+				$classTask= 'vartask';
+				$lblTask  = 'Task List';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
 				break;
@@ -97,6 +108,18 @@ class Servicios {
 				if ($classVer != '') {
 					$cadRows = $cadRows.'		<li>
 											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">'.$lblVer.'</a>
+											</li>';	
+				}
+				
+				if ($classTask != '') {
+					$cadRows = $cadRows.'		<li>
+											<a href="javascript:void(0)" class="'.$classTask.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal2">'.$lblTask.'</a>
+											</li>';	
+				}
+				
+				if ($classEditar != '') {
+					$cadRows = $cadRows.'		<li>
+											<a href="javascript:void(0)" class="'.$classEditar.'" id="'.$row[0].'" >'.$lblEditar.'</a>
 											</li>';	
 				}
 										
@@ -669,30 +692,17 @@ class Servicios {
 								
 							} else {
 								
-								if (strpos($row[1],"date") !== false) {
+								if (strpos($row[1],"datetime") !== false) {
 									$label = ucwords($label);
 									$campo = strtolower($row[0]);
-									/*
-									$form	=	$form.'
-									
-									<div class="form-group col-md-6">
-										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
-										<div class="input-group date form_date col-md-6" data-date="" data-date-format="dd MM yyyy" data-link-field="'.$campo.'" data-link-format="yyyy-mm-dd">
-											<input class="form-control" value="'.mysql_result($resMod,0,$row[0]).'" size="50" type="text" value="" readonly>
-											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-										</div>
-										<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="'.mysql_result($resMod,0,$row[0]).'" />
-									</div>
-									
-									';
-									*/
+
 									
 									$form	=	$form.'
 									
 									<div class="form-group col-md-6">
 										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
 										<div class="input-group col-md-6">
-											<input class="form-control" type="text" name="'.$campo.'" id="'.$campo.'" value="Date"/>
+											<input class="form-control" type="text" name="'.$campo.'" id="'.$campo.'" value="'.mysql_result($resMod,0,$row[0]).'"/>
 										</div>
 										
 									</div>
@@ -760,19 +770,53 @@ class Servicios {
 											';
 											
 											} else {
+												
+												if (strpos($row[1],"date") !== false) {
 												$label = ucwords($label);
 												$campo = strtolower($row[0]);
+												/*
+												$form	=	$form.'
+												
+												<div class="form-group col-md-6">
+													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+													<div class="input-group date form_date col-md-6" data-date="" data-date-format="dd MM yyyy" data-link-field="'.$campo.'" data-link-format="yyyy-mm-dd">
+														<input class="form-control" value="'.mysql_result($resMod,0,$row[0]).'" size="50" type="text" value="" readonly>
+														<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+													</div>
+													<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="'.mysql_result($resMod,0,$row[0]).'" />
+												</div>
+												
+												';
+												*/
 												
 												$form	=	$form.'
 												
 												<div class="form-group col-md-6">
 													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
-													<div class="input-group col-md-12">
-														<input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required>
+													<div class="input-group col-md-6">
+														<input class="form-control" type="text" name="'.$campo.'" id="'.$campo.'" value="Date"/>
 													</div>
+													
 												</div>
 												
 												';
+												
+												} else {
+													$label = ucwords($label);
+													$campo = strtolower($row[0]);
+													
+													$form	=	$form.'
+													
+													<div class="form-group col-md-6">
+														<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+														<div class="input-group col-md-12">
+															<input type="text" value="'.utf8_encode(mysql_result($resMod,0,$row[0])).'" class="form-control" id="'.$campo.'" name="'.$campo.'" placeholder="Enter the '.$label.'..." required>
+														</div>
+													</div>
+													
+													';
+												
+												}
 											}
 										}
 									}

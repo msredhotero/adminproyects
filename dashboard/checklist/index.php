@@ -59,8 +59,12 @@ while ($rowTT3 = mysql_fetch_array($resState)) {
 	
 }
 
-$cadRef = '<option value="'.$_SESSION['idusuario'].'" selected>'.utf8_encode($_SESSION['nombre_p']).'</option>';
+$resEmp 	= $serviciosProyects->traerUser();
 
+$cadRef = '';
+while ($rowU = mysql_fetch_array($resEmp)) {
+	$cadRef .= '<option value="'.$rowU['iduser'].'" >'.utf8_encode($rowU['fullname']).'</option>';
+}
 
 $resProyect 	= $serviciosProyects->traerProyectsPorUsuario($_SESSION['idusuario']);
 $cadVar2 = '';
@@ -80,7 +84,7 @@ $resList 	= $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
 
 $cadList = '<ul class="list-inline">';
 while ($rowT = mysql_fetch_array($resList)) {
-	$cadList = $cadList."<li>".'<input id="user'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="user'.$rowT[0].'"><p>'.$rowT['task'].'</p>'."</li>";
+	$cadList = $cadList."<li>".'<input id="task'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowT[0].'"><p>'.$rowT['task'].'</p>'."</li>";
 }
 $cadList = $cadList."</ul>";
 
@@ -104,7 +108,7 @@ $cabeceras 		= "	<th>Projet</th>
 
 $formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerCheckListByUser($_SESSION['idusuario']),9);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerCheckListByUser($_SESSION['idusuario']),95);
 
 
 
@@ -235,15 +239,17 @@ if ($_SESSION['refroll_p'] != 1) {
 
 </div>
 
+
+
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Users assigned to the project</h4>
+        <h4 class="modal-title" id="myModalLabel">List of Task</h4>
       </div>
-      <div class="modal-body userasignates">
+      <div class="modal-body tasklist">
         
       </div>
       <div class="modal-footer">
@@ -272,19 +278,20 @@ $(document).ready(function(){
 	
 	
 	/*userasignates*/
-	$("#example").on("click",'.varver', function(){
+	$("#example").on("click",'.vartask', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 
 			$.ajax({
-					data:  {id: usersid, accion: 'traerUserbyProyect'},
+					data:  {id: usersid, 
+							accion: 'traerListTaskByCheckList'},
 					url:   '../../ajax/ajax.php',
 					type:  'post',
 					beforeSend: function () {
 							
 					},
 					success:  function (response) {
-							$('.userasignates').html(response);
+							$('.tasklist').html(response);
 							
 					}
 			});
@@ -311,11 +318,26 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
+	
+	
 	$("#example").on("click",'.varmodificar', function(){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			
 			url = "update.php?id=" + usersid;
+			$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton modificar
+	
+	
+	
+	$("#example").on("click",'.varver', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			
+			url = "view.php?id=" + usersid;
 			$(location).attr('href',url);
 		  } else {
 			alert("Error redo action.");	

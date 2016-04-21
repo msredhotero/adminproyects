@@ -33,8 +33,8 @@ function query($sql,$accion) {
 }
 
 
-$tabla 		= "checklist";
-$nombre 	= "CheckList";
+$tabla 		= "taskschecklist";
+$nombre 	= "TasksCheckList";
 $servicios	= "Tasks";
 
 $sql	=	"show columns from ".$tabla;

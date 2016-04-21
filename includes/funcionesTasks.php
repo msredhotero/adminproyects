@@ -179,7 +179,11 @@ return $res;
 
 function eliminarCheckList($id) {
 $sql = "delete from checklist where idchecklist =".$id;
+
+$this->eliminarTasksCheckListByCheckList($id);
+
 $res = $this->query($sql,0);
+
 return $res;
 }
 
@@ -198,13 +202,101 @@ return $res;
 }
 
 function traerCheckListByUser($idUser) {
-$sql = "select idchecklist,refproject,refuser,enddate,alarm,typetask,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist where refuser =".$idUser;
+$sql = "select idchecklist,p.title,u.fullname,enddate,alarm,typetask,st.status,
+				(case when executed = 1 then 'Yes' else 'No' end) as executed,
+				(case when timelimitfinished = 1 then 'Yes' else 'No' end) as timelimitfinished,
+				(case when executedincomplete = 1 then 'Yes' else 'No' end) as executedincomplete,
+				cl.refproject,cl.refuser, cl.refstatechecklist
+		from checklist cl
+		inner join proyects p on p.idproyect = cl.refproject
+		inner join statechecklist st on st.idstatechecklist = cl.refstatechecklist
+		inner join user u on u.iduser = cl.refuser
+		where refuser =".$idUser;
 $res = $this->query($sql,0);
 return $res;
 }
 
 /* Fin */
 
+/* PARA TasksCheckList */
+
+function insertarTasksCheckList($refchecklist,$reftask,$yes,$no,$other,$observation) {
+$sql = "insert into taskschecklist(idtaskschecklist,refchecklist,reftask,yes,no,other,observation)
+values ('',".$refchecklist.",".$reftask.",".$yes.",".$no.",".$other.",'".$observation."')";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarTasksCheckList($id,$refchecklist,$reftask,$yes,$no,$other,$observation) {
+$sql = "update taskschecklist
+set
+refchecklist = ".$refchecklist.",reftask = ".$reftask.",yes = ".$yes.",no = ".$no.",other = ".$other.",observation = '".$observation."' 
+where idtaskschecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarTasksCheckList($id) {
+$sql = "delete from taskschecklist where idtaskschecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+function eliminarTasksCheckListByCheckList($id) {
+$sql = "delete from taskschecklist where refchecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerTasksCheckList() {
+$sql = "select idtaskschecklist,refchecklist,reftask,yes,no,other,observation from taskschecklist order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerTasksCheckListPorId($id) {
+$sql = "select idtaskschecklist,refchecklist,reftask,yes,no,other,observation from taskschecklist where idtaskschecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerTasksCheckListByCheckListUser($id) {
+	
+session_start();	
+	
+$sql = "select idtaskschecklist,cl.typetask,t.task, t.order,
+				(case when yes = 1 then 'X' else '' end) as yes,
+				(case when no = 1 then 'X' else '' end) as no,
+				(case when other = 1 then 'X' else '' end) as other,
+				observation , tc.refchecklist,tc.reftask
+			from taskschecklist tc
+			inner join tasks t on t.idtask = tc.reftask
+			inner join checklist cl on cl.idchecklist = tc.refchecklist
+			where refchecklist =".$id." and cl.refuser =".$_SESSION['idusuario']." order by t.order";
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerTasksCheckListByCheckListUserSinSession($id, $idUser) {	
+	
+$sql = "select idtaskschecklist,cl.typetask,t.task, t.order,
+				(case when yes = 1 then 'X' else '' end) as yes,
+				(case when no = 1 then 'X' else '' end) as no,
+				(case when other = 1 then 'X' else '' end) as other,
+				observation , tc.refchecklist,tc.reftask
+			from taskschecklist tc
+			inner join tasks t on t.idtask = tc.reftask
+			inner join checklist cl on cl.idchecklist = tc.refchecklist
+			where refchecklist =".$id." and cl.refuser =".$idUser." order by t.order";
+$res = $this->query($sql,0);
+return $res;
+}
+
+/* Fin */
 
 function query($sql,$accion) {
 		

@@ -111,35 +111,11 @@ $resTask = $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
 
 $resTaskCheckList = $serviciosTasks->traerTasksCheckListByCheckListUserSinSession($id,$_SESSION['idusuario']);
 
+$resTaskCheckListValidation = $serviciosTasks->traerTasksCheckListByCheckListUserSinSession($id,$_SESSION['idusuario']);
 
-	while ($subrow = mysql_fetch_array($resTaskCheckList)) {
-			$arrayFS[] = $subrow;
-	}
-
-
-
-$cadTask = '<ul class="list-inline">';
-while ($rowFS = mysql_fetch_array($resTask)) {
-	$check = '';
-	if (mysql_num_rows($resTaskCheckList)>0) {
-		foreach ($arrayFS as $item) {
-			if (stripslashes($item['reftask']) == $rowFS[0]) {
-				$check = 'checked';	
-			}
-		}
-	}
-	$cadTask = $cadTask."<li>".'<input id="task'.$rowFS[0].'" '.$check.' class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowFS[0].'"><p>'.$rowFS[1].'</p>'."</li>";
-
-
-}
-
-$cadTask = $cadTask."</ul>";
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 /////////////////// Fechas para Suspender ///////////////////////
-
-
-$formulario 	= $serviciosFunciones->camposTablaModificar($id, $idTabla, $modificar,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_p'] != 1) {
@@ -211,24 +187,49 @@ if ($_SESSION['refroll_p'] != 1) {
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Update <?php echo $singular; ?></p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Load Task</p>
         	
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
         	
-			<div class="row">
-			<?php echo $formulario; ?>
+			<div class="row" style="margin:10px 15px;">
+				<table class="table table-bordered table-responsive table-striped">
+                	<thead>
+                    	<th>Order</th>
+                        <th>Task</th>
+                        <th>Yes</th>
+                        <th>No</th>
+                        <th>Other</th>
+                    </thead>
+                    <tbody>
+                    	<?php
+							$i = 0;
+							while ($row = mysql_fetch_array($resTaskCheckList)) {
+						?>
+                        	<tr>
+                            	<td><?php echo $row['order']; ?></td>
+                                <td><?php echo $row['task']; ?></td>
+                                <td><input class="form-control" type="checkbox" id="yes<?php echo $row['idtaskschecklist']; ?>" name="yes<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['yes']==1) echo 'checked'; ?>/></td>
+                                <td><input class="form-control" type="checkbox" id="no<?php echo $row['idtaskschecklist']; ?>" name="no<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['no']==1) echo 'checked'; ?>/></td>
+                                <td><input class="form-control" type="checkbox" id="other<?php echo $row['idtaskschecklist']; ?>" name="other<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['other']==1) echo 'checked'; ?>/></td>
+                            </tr>
+                            <tr class="close" id="comentario<?php echo $row['idtaskschecklist']; ?>" style="display:none;">
+                        		<td colspan="5">
+                                	<textarea id="observation<?php echo $row['idtaskschecklist']; ?>" name="observation<?php echo $row['idtaskschecklist']; ?>" class="form-control" rows="4" cols="40">
+                                    
+                                    </textarea>
+                                </td>
+                        	</tr>
+                        <?php
+							$i += 1;
+							}
+						?>
+                    </tbody>
+                </table>
             </div>
             
-            <div class="row">
-            	<div class="form-group col-md-12">
-                	<label class="control-label" style="text-align:left" for="fechas">Select Task</label>
-                    <div class="input-group col-md-12">
-                    	<?php echo $cadTask; ?>
-                    </div>
-                </div>
-            </div>
+            
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
                 <div class='alert'>
@@ -243,11 +244,9 @@ if ($_SESSION['refroll_p'] != 1) {
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
-                        <button type="button" class="btn btn-warning" id="cargar" style="margin-left:0px;">Update</button>
+                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Load</button>
                     </li>
-                    <li>
-                        <button type="button" class="btn btn-danger varborrar" id="<?php echo $id; ?>" style="margin-left:0px;">Delete</button>
-                    </li>
+
                     <li>
                         <button type="button" class="btn btn-default volver" style="margin-left:0px;">Back</button>
                     </li>
@@ -301,7 +300,24 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
-
+	<?php
+		$i = 0;
+		while ($row = mysql_fetch_array($resTaskCheckListValidation)) {
+	?>
+		$('#order<?php echo $row['idtaskschecklist']; ?>').click(function() {
+			if ($('#comentario<?php echo $row['idtaskschecklist']; ?>').html() == 'close') {
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').show("slow");
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('close');
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('open');
+			} else {
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').slideToggle( "slow" );
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('open');
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('close');
+			}
+		}); 
+	<?php	
+		}
+	?>
 	
 	 $( "#dialog2" ).dialog({
 		 	

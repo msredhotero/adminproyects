@@ -141,7 +141,9 @@ break;
 case 'eliminarCheckList':
 eliminarCheckList($serviciosTasks);
 break;
-
+case 'traerListTaskByCheckList':
+traerListTaskByCheckList($serviciosTasks);
+break;
 /* Fin */
 }
 
@@ -449,35 +451,52 @@ function modificarTaskOrder($serviciosTasks) {
 
 /* PARA CheckList */
 function insertarCheckList($serviciosTasks) {
-$refproject = $_POST['refproject'];
-$refuser = $_POST['refuser'];
-$enddate = $_POST['enddate'];
-$alarm = $_POST['alarm'];
-$typetask = $_POST['typetask'];
+	$refproject = $_POST['refproject'];
+	$refuser = $_POST['refuser'];
+	$enddate = $_POST['enddate'];
+	$alarm = $_POST['alarm'];
+	$typetask = $_POST['typetask'];
+	
+	session_start();
+	
+	$refUser = $_POST['typetask'];
+	
+	$refstatechecklist = $_POST['refstatechecklist'];
+	
+	if (isset($_POST['executed'])) {
+		$executed = 1;
+	} else {
+		$executed = 0;
+	}
+	
+	if (isset($_POST['timelimitfinished'])) {
+		$timelimitfinished = 1;
+	} else {
+		$timelimitfinished = 0;
+	}
+	
+	if (isset($_POST['executedincomplete'])) {
+		$executedincomplete = 1;
+	} else {
+		$executedincomplete = 0;
+	}
+	
+	$res = $serviciosTasks->insertarCheckList($refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
+	
+	if ((integer)$res > 0) {
+		$resTask = $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
+		$cad = 'task';
+		while ($rowFS = mysql_fetch_array($resTask)) {
+			if (isset($_POST[$cad.$rowFS[0]])) {
+				$serviciosTasks->insertarTasksCheckList($res,$rowFS[0],0,0,0,'');
+			}
+		}
+		echo '';
+	} else {
+		echo 'There was an error inserting data';
+	}
+}
 
-$refstatechecklist = $_POST['refstatechecklist'];
-if (isset($_POST['executed'])) {
-$executed = 1;
-} else {
-$executed = 0;
-}
-if (isset($_POST['timelimitfinished'])) {
-$timelimitfinished = 1;
-} else {
-$timelimitfinished = 0;
-}
-if (isset($_POST['executedincomplete'])) {
-$executedincomplete = 1;
-} else {
-$executedincomplete = 0;
-}
-$res = $serviciosTasks->insertarCheckList($refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
-if ((integer)$res > 0) {
-echo '';
-} else {
-echo 'There was an error inserting data';
-}
-}
 function modificarCheckList($serviciosTasks) {
 $id = $_POST['id'];
 $refproject = $_POST['refproject'];
@@ -501,17 +520,61 @@ $executedincomplete = 1;
 } else {
 $executedincomplete = 0;
 }
-$res = $serviciosTasks->modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
-if ($res == true) {
-echo '';
-} else {
-echo 'There was an error modifying data';
-}
+	
+	session_start();
+	
+	$res = $serviciosTasks->modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
+	
+	if ($res == true) {
+		$serviciosTasks->eliminarTasksCheckListByCheckList($id);
+			$resTask = $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
+			$cad = 'task';
+			while ($rowFS = mysql_fetch_array($resTask)) {
+				if (isset($_POST[$cad.$rowFS[0]])) {
+					$serviciosTasks->insertarTasksCheckList($id,$rowFS[0],0,0,0,'');
+				}
+			}
+		echo '';
+	} else {
+		echo 'There was an error modifying data';
+	}
 }
 function eliminarCheckList($serviciosTasks) {
 $id = $_POST['id'];
 $res = $serviciosTasks->eliminarCheckList($id);
+
 echo $res;
+}
+
+function traerListTaskByCheckList($serviciosTasks) {
+$id = $_POST['id'];
+$res = $serviciosTasks->traerTasksCheckListByCheckListUser($id);
+
+$cad = '';
+
+$cad = '<table class="table table-striped table-responsive table-bordered">';
+$cad .= '<thead>
+			<th>Task</th>
+			<th>Order</th>
+			<th>Yes</th>
+			<th>No</th>
+			<th>Other</th>
+			<th style="width:250px;">Obs.</th>
+		</thead>';
+$cad .= '<tbody>';
+while ($rowT = mysql_fetch_array($res)) {
+	$cad .= '<tr>';
+	$cad .= '<td>'.$rowT['task'].'</td>';
+	$cad .= '<td>'.$rowT['order'].'</td>';
+	$cad .= '<td>'.$rowT['yes'].'</td>';
+	$cad .= '<td>'.$rowT['no'].'</td>';
+	$cad .= '<td>'.$rowT['other'].'</td>';
+	$cad .= '<td>'.$rowT['observation'].'</td>';
+	$cad .= '</tr>';
+}
+$cad .= '</tbody>';
+
+echo $cad;	
 }
 
 /* Fin */ 
