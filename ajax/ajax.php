@@ -453,6 +453,8 @@ $refproject = $_POST['refproject'];
 $refuser = $_POST['refuser'];
 $enddate = $_POST['enddate'];
 $alarm = $_POST['alarm'];
+$typetask = $_POST['typetask'];
+
 $refstatechecklist = $_POST['refstatechecklist'];
 if (isset($_POST['executed'])) {
 $executed = 1;
@@ -469,7 +471,7 @@ $executedincomplete = 1;
 } else {
 $executedincomplete = 0;
 }
-$res = $serviciosTasks->insertarCheckList($refproject,$refuser,$enddate,$alarm,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
+$res = $serviciosTasks->insertarCheckList($refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
 if ((integer)$res > 0) {
 echo '';
 } else {
@@ -482,6 +484,7 @@ $refproject = $_POST['refproject'];
 $refuser = $_POST['refuser'];
 $enddate = $_POST['enddate'];
 $alarm = $_POST['alarm'];
+$typetask = $_POST['typetask'];
 $refstatechecklist = $_POST['refstatechecklist'];
 if (isset($_POST['executed'])) {
 $executed = 1;
@@ -498,7 +501,7 @@ $executedincomplete = 1;
 } else {
 $executedincomplete = 0;
 }
-$res = $serviciosTasks->modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
+$res = $serviciosTasks->modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete);
 if ($res == true) {
 echo '';
 } else {

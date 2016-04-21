@@ -43,8 +43,8 @@ $tituloWeb = "Restricted access: B-Projects";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "checklist";
 
-$lblCambio	 	= array("refuser","refproject","refstatechecklist","enddate","timelimitfinished","executedincomplete");
-$lblreemplazo	= array("User","Projet","Status","End Date","Time limit finished","Executed Incomplete");
+$lblCambio	 	= array("refuser","refproject","refstatechecklist","enddate","timelimitfinished","executedincomplete","typetask");
+$lblreemplazo	= array("User","Projet","Status","End Date","Time limit finished","Executed Incomplete","Type of Task");
 
 
 $cadRef = '<option value="'.$_SESSION['idusuario'].'" selected>'.utf8_encode($_SESSION['nombre_p']).'</option>';
@@ -59,8 +59,20 @@ while ($rowTT3 = mysql_fetch_array($resState)) {
 	
 }
 
-$refdescripcion = array(0 => $cadRef,1=>$cadRef3);
-$refCampo 	=  array("refuser","refstatechecklist");
+$cadRef = '<option value="'.$_SESSION['idusuario'].'" selected>'.utf8_encode($_SESSION['nombre_p']).'</option>';
+
+
+$resProyect 	= $serviciosProyects->traerProyectsPorUsuario($_SESSION['idusuario']);
+$cadVar2 = '';
+while ($rowP = mysql_fetch_array($resProyect)) {
+
+	$cadVar2 = $cadVar2.'<option value="'.$rowP[0].'">'.utf8_encode($rowP['title']).'</option>';
+
+	
+}
+
+$refdescripcion = array(0 => $cadRef,1=>$cadRef3,2=>$cadVar2);
+$refCampo 	=  array("refuser","refstatechecklist","refproject");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
@@ -79,6 +91,7 @@ $cabeceras 		= "	<th>Projet</th>
 					<th>User</th>
 					<th>End Date</th>
 					<th>Alarm</th>
+					<th>Type of Task</th>
 					<th>Status</th>
 					<th>Executed</th>
 					<th>Time Limit Finished</th>
@@ -91,7 +104,7 @@ $cabeceras 		= "	<th>Projet</th>
 
 $formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerCheckListByUser($_SESSION['idusuario']),8);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerCheckListByUser($_SESSION['idusuario']),9);
 
 
 
