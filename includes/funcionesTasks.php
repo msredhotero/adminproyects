@@ -33,13 +33,36 @@ $res = $this->query($sql,0);
 return $res;
 }
 
+function modificarOrden($id, $order) {
+	$sql = "update tasks
+	set
+	`order` = ".$order."
+	where idtask =".$id;
+	$res = $this->query($sql,0);
+	return $res;
+}
+
 
 function eliminarTasks($id) {
+	
+session_start();
+
 $sql = "delete from tasks where idtask =".$id;
 $res = $this->query($sql,0);
+
+$this->reOrdenarOrden($_SESSION['idusuario']);
+
 return $res;
 }
 
+function reOrdenarOrden($idUser) {
+	$res = $this->traerTasksByUser($idUser);
+	$i = 1;
+	while ($row = mysql_fetch_array($res)) {
+		$this->modificarOrden($row['idtask'],$i);
+		$i += 1;
+	}
+}
 
 function traerTasks() {
 $sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser from tasks order by `order` ";
@@ -58,9 +81,28 @@ function traerTasksByUser($idUser) {
 $sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser 
 		from tasks 
 		where refuser = ".$idUser."
-		order by `order`  ";
+		order by idtask asc";
 $res = $this->query($sql,0);
 return $res;
+}
+
+function traerTasksByUserMenosUna($idUser, $id) {
+$sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser 
+		from tasks 
+		where refuser = ".$idUser." and idtask <> ".$id."
+		order by idtask asc";
+$res = $this->query($sql,0);
+return $res;
+}
+
+function modificarTaskOrder($order, $neworder) {
+	$resO = $this->traerTasksPorId($order);
+	$resNO= $this->traerTasksPorId($neworder);
+	
+	$this->modificarOrden($order, mysql_result($resNO,0,'order'));
+	$this->modificarOrden($neworder, mysql_result($resO,0,'order'));
+	
+	return true;	
 }
 
 /* Fin */

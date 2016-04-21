@@ -37,7 +37,8 @@ $cabeceras 		= "	<th>Order</th>
 					<th>Responsible</th>
 					<th>State</th>
 					<th>Commission</th>
-					<th>Observation</th>";
+					<th>Observation</th>
+					<th>Send Email</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 

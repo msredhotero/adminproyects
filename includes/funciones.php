@@ -26,6 +26,7 @@ class Servicios {
 				$cantidad = 8;
 				$classMod = 'varmodificar';
 				$classVer = 'varver';
+				$lblVer	  = 'View';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
 				break;
@@ -35,6 +36,14 @@ class Servicios {
 				$classEli = 'varborrarprincipal';
 				$classVer = '';
 				$idresultados = "resultadosprincipal";
+				break;
+			case 96:
+				$cantidad = 4;
+				$classMod = 'varmodificar';
+				$classVer = 'varorder';
+				$lblVer	  = 'Change Order';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
 				break;
 			default:
 				$classMod = 'varmodificar';
@@ -87,7 +96,7 @@ class Servicios {
 										
 				if ($classVer != '') {
 					$cadRows = $cadRows.'		<li>
-											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">View</a>
+											<a href="javascript:void(0)" class="'.$classVer.'" id="'.$row[0].'" data-toggle="modal" data-target="#myModal">'.$lblVer.'</a>
 											</li>';	
 				}
 										
@@ -101,6 +110,7 @@ class Servicios {
 							</tr>
 				';
 			} else {
+				
 				$cadRows = $cadRows.'
 								'.$cadsubRows.'
 								<td>

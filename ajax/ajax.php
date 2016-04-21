@@ -126,7 +126,9 @@ break;
 case 'eliminarTasks':
 eliminarTasks($serviciosTasks);
 break;
-
+case 'modificarTaskOrder':
+modificarTaskOrder($serviciosTasks);
+break;
 /* Fin */
 
 /* PARA CheckList */
@@ -220,7 +222,7 @@ function insertarProyects($serviciosProyect) {
 		}
 		echo ''; 
 	} else { 
-		echo 'Huvo un error al insertar datos';	
+		echo 'There was an error inserting data';	
 	} 
 	//echo $res;
 } 
@@ -265,7 +267,7 @@ function modificarProyects($serviciosProyect) {
 			}
 		echo ''; 
 	} else { 
-		echo 'Huvo un error al modificar datos'; 
+		echo 'There was an error modifying data'; 
 	} 
 } 
 function eliminarProyects($serviciosProyect) { 
@@ -405,7 +407,7 @@ $res = $serviciosTasks->insertarTasks($task,$order,$value,$active,$refuser);
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'There was an error inserting data';
 }
 }
 function modificarTasks($serviciosTasks) {
@@ -423,7 +425,7 @@ $res = $serviciosTasks->modificarTasks($id,$task,$order,$value,$active,$refuser)
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'There was an error modifying data';
 }
 }
 function eliminarTasks($serviciosTasks) {
@@ -432,6 +434,17 @@ $res = $serviciosTasks->eliminarTasks($id);
 echo $res;
 }
 
+function modificarTaskOrder($serviciosTasks) {
+	$order 		= $_POST['order'];
+	$neworder 	= $_POST['oorder'];
+	
+	$res = $serviciosTasks->modificarTaskOrder($order,$neworder);
+	if ($res == true) {
+		echo '';
+	} else {
+		echo 'There was an error modifying data';
+	}
+}
 /* Fin */ 
 
 /* PARA CheckList */
@@ -460,7 +473,7 @@ $res = $serviciosTasks->insertarCheckList($refproject,$refuser,$enddate,$alarm,$
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'There was an error inserting data';
 }
 }
 function modificarCheckList($serviciosTasks) {
@@ -489,7 +502,7 @@ $res = $serviciosTasks->modificarCheckList($id,$refproject,$refuser,$enddate,$al
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'There was an error modifying data';
 }
 }
 function eliminarCheckList($serviciosTasks) {
