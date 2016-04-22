@@ -237,6 +237,15 @@ $res = $this->query($sql,0);
 return $res;
 }
 
+function cargarTasksCheckList($id,$yes,$no,$other,$observation) {
+$sql = "update taskschecklist
+set
+yes = ".$yes.",no = ".$no.",other = ".$other.",observation = '".$observation."' 
+where idtaskschecklist =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
 
 function eliminarTasksCheckList($id) {
 $sql = "delete from taskschecklist where idtaskschecklist =".$id;

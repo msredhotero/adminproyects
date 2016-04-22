@@ -144,6 +144,10 @@ break;
 case 'traerListTaskByCheckList':
 traerListTaskByCheckList($serviciosTasks);
 break;
+
+case 'cargarTaskCheckListByTask':
+cargarTaskCheckListByTask($serviciosTasks);
+break;
 /* Fin */
 }
 
@@ -577,6 +581,42 @@ $cad .= '</tbody>';
 echo $cad;	
 }
 
+
+function cargarTaskCheckListByTask($serviciosTasks) {
+	$id		=	$_POST['checklist'];
+	
+	session_start();
+	
+	$resTaskCheckList = $serviciosTasks->traerTasksCheckListByCheckListUserSinSession($id,$_SESSION['idusuario']);
+	
+	while ($row = mysql_fetch_array($resTaskCheckList)) {
+		if (isset($_POST['yes'.$row['idtaskschecklist']])) {
+			$yes = 1;
+		} else {
+			$yes = 0;
+		}
+		
+		if (isset($_POST['no'.$row['idtaskschecklist']])) {
+			$no = 1;
+		} else {
+			$no = 0;
+		}
+		
+		if (isset($_POST['other'.$row['idtaskschecklist']])) {
+			$other = 1;
+			$observation = $_POST['observation'.$row['idtaskschecklist']];
+
+		} else {
+			$other = 0;
+			$observation = '';
+		}
+		
+		$serviciosTasks->cargarTasksCheckList($row['idtaskschecklist'],$yes,$no,$other,$observation);
+	}
+	
+	return '';
+	
+}
 /* Fin */ 
 
 /////////////////////////////////////////////////////***** FIN **********/////////////////////////////////////////////////////

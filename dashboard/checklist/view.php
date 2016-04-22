@@ -210,23 +210,35 @@ if ($_SESSION['refroll_p'] != 1) {
                         	<tr>
                             	<td><?php echo $row['order']; ?></td>
                                 <td><?php echo $row['task']; ?></td>
-                                <td><input class="form-control" type="checkbox" id="yes<?php echo $row['idtaskschecklist']; ?>" name="yes<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['yes']==1) echo 'checked'; ?>/></td>
-                                <td><input class="form-control" type="checkbox" id="no<?php echo $row['idtaskschecklist']; ?>" name="no<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['no']==1) echo 'checked'; ?>/></td>
-                                <td><input class="form-control" type="checkbox" id="other<?php echo $row['idtaskschecklist']; ?>" name="other<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['other']==1) echo 'checked'; ?>/></td>
+                                <td><input class="form-control" type="checkbox" id="yes<?php echo $row['idtaskschecklist']; ?>" name="yes<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['yes']=='X') echo 'checked'; ?>/></td>
+                                <td><input class="form-control" type="checkbox" id="no<?php echo $row['idtaskschecklist']; ?>" name="no<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['no']=='X') echo 'checked'; ?>/></td>
+                                <td><input class="form-control" type="checkbox" id="other<?php echo $row['idtaskschecklist']; ?>" name="other<?php echo $row['idtaskschecklist']; ?>" <?php if ($row['other']=='X') echo 'checked'; ?>/></td>
                             </tr>
-                            <tr class="close" id="comentario<?php echo $row['idtaskschecklist']; ?>" style="display:none;">
+                            <?php if ($row['other']!='X') { ?>
+                            <tr class="cerrar" id="comentario<?php echo $row['idtaskschecklist']; ?>" style="display:none;">
                         		<td colspan="5">
-                                	<textarea id="observation<?php echo $row['idtaskschecklist']; ?>" name="observation<?php echo $row['idtaskschecklist']; ?>" class="form-control" rows="4" cols="40">
+                                	<textarea id="observation<?php echo $row['idtaskschecklist']; ?>" name="observation<?php echo $row['idtaskschecklist']; ?>" class="form-control" rows="4" cols="110">
                                     
                                     </textarea>
                                 </td>
                         	</tr>
+                            <?php } else { ?>
+                            <tr class="abrir" id="comentario<?php echo $row['idtaskschecklist']; ?>">
+                        		<td colspan="5">
+                                	<textarea id="observation<?php echo $row['idtaskschecklist']; ?>" name="observation<?php echo $row['idtaskschecklist']; ?>" class="form-control" rows="4" cols="110">
+                                    	<?php echo $row['observation']; ?>
+                                    </textarea>
+                                </td>
+                        	</tr>
+                            <?php } ?>
                         <?php
 							$i += 1;
 							}
 						?>
                     </tbody>
                 </table>
+                <input type="hidden" id="accion" name="accion" value="cargarTaskCheckListByTask"/>
+                <input type="hidden" id="checklist" name="checklist" value="<?php echo $id; ?>"/>
             </div>
             
             
@@ -304,17 +316,55 @@ $(document).ready(function(){
 		$i = 0;
 		while ($row = mysql_fetch_array($resTaskCheckListValidation)) {
 	?>
-		$('#order<?php echo $row['idtaskschecklist']; ?>').click(function() {
-			if ($('#comentario<?php echo $row['idtaskschecklist']; ?>').html() == 'close') {
+		$('#other<?php echo $row['idtaskschecklist']; ?>').click(function() {
+			
+			if ( $(this).is(':checked') ) {
 				$('#comentario<?php echo $row['idtaskschecklist']; ?>').show("slow");
-				$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('close');
-				$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('open');
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('cerrar');
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('abrir');
+				
+				$('#yes<?php echo $row['idtaskschecklist']; ?>').prop('checked', false);
+				$('#no<?php echo $row['idtaskschecklist']; ?>').prop('checked', false);
 			} else {
 				$('#comentario<?php echo $row['idtaskschecklist']; ?>').slideToggle( "slow" );
-				$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('open');
-				$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('close');
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('abrir');
+				$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('cerrar');
 			}
+			
+
+			
+			
 		}); 
+
+		
+		$("#yes<?php echo $row['idtaskschecklist']; ?>").on( 'change', function() {
+			if( $(this).is(':checked') ) {
+				var className = $('#comentario<?php echo $row['idtaskschecklist']; ?>').attr('class');
+				if (className == 'abrir') {
+					$('#comentario<?php echo $row['idtaskschecklist']; ?>').slideToggle( "slow" );
+					$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('abrir');
+					$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('cerrar');
+				}
+				// Hacer algo si el checkbox ha sido seleccionado
+				$('#other<?php echo $row['idtaskschecklist']; ?>').prop('checked', false);
+				$('#no<?php echo $row['idtaskschecklist']; ?>').prop('checked', false);
+			}
+		});
+		
+		$("#no<?php echo $row['idtaskschecklist']; ?>").on( 'change', function() {
+			if( $(this).is(':checked') ) {
+				var className = $('#comentario<?php echo $row['idtaskschecklist']; ?>').attr('class');
+				if (className == 'abrir') {
+					$('#comentario<?php echo $row['idtaskschecklist']; ?>').slideToggle( "slow" );
+					$('#comentario<?php echo $row['idtaskschecklist']; ?>').removeClass('abrir');
+					$('#comentario<?php echo $row['idtaskschecklist']; ?>').addClass('cerrar');
+				}
+				// Hacer algo si el checkbox ha sido seleccionado
+				$('#other<?php echo $row['idtaskschecklist']; ?>').prop('checked', false);
+				$('#yes<?php echo $row['idtaskschecklist']; ?>').prop('checked', false);
+			}
+		});
+		
 	<?php	
 		}
 	?>
