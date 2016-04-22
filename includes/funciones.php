@@ -15,6 +15,7 @@ class Servicios {
 		$cadRows = '';
 		$classTask = '';
 		$classVer = '';
+		$classEditar = '';
 		switch ($cantidad) {
 			case 99:
 				$cantidad = 8;
@@ -973,7 +974,254 @@ class Servicios {
 	}
 
 
+	function camposTablaVer($id,$lblid,$tabla,$lblcambio,$lblreemplazo,$refdescripcion,$refCampo) {
+		
+		switch ($tabla) {
+			case 'dbtorneos':
+				
+				break;
 
+			default:
+				$sqlMod = "select * from ".$tabla." where ".$lblid." = ".$id;
+				$resMod = $this->query($sqlMod,0);
+		}
+		/*if ($tabla == 'dbtorneos') {
+			$resMod = $this->TraerIdTorneos($id);
+		} else {
+			$sqlMod = "select * from ".$tabla." where ".$lblid." = ".$id;
+			$resMod = $this->query($sqlMod,0);
+		}*/
+		$sql	=	"show columns from ".$tabla;
+		$res 	=	$this->query($sql,0);
+		
+		$camposEscondido = "";
+		/* Analizar para despues */
+		/*if (count($refencias) > 0) {
+			$j = 0;
+
+			foreach ($refencias as $reftablas) {
+				$sqlTablas = "select id".$reftablas.", ".$refdescripcion[$j]." from ".$reftablas." order by ".$refdescripcion[$j];
+				$resultadoRef[$j][0] = $this->query($sqlTablas,0);
+				$resultadoRef[$j][1] = $refcampos[$j];
+			}
+		}*/
+		
+		
+		if ($res == false) {
+			return 'Error al traer datos';
+		} else {
+			
+			$form	=	'';
+			
+			while ($row = mysql_fetch_array($res)) {
+				
+				$i = 0;
+				foreach ($lblcambio as $cambio) {
+					if ($row[0] == $cambio) {
+						$label = $lblreemplazo[$i];
+						$i = 0;
+						break;
+					} else {
+						$label = $row[0];
+					}
+					$i = $i + 1;
+				}
+				
+				if ($row[3] != 'PRI') {
+					if (strpos($row[1],"decimal") !== false) {
+						$form	=	$form.'
+						
+						<div class="form-group col-md-6 col-xs-6">
+							<label for="'.$label.'" class="control-label" style="text-align:left">'.ucwords($label).'</label>
+							<div class="input-group col-md-12">
+								
+								<p>'.mysql_result($resMod,0,$row[0]).'</p>
+								
+							</div>
+						</div>
+						
+						';
+					} else {
+						if ( in_array($row[0],$refCampo) ) {
+							
+							$campo = strtolower($row[0]);
+							
+							$option = $refdescripcion[array_search($row[0], $refCampo)];
+							/*
+							$i = 0;
+							foreach ($lblcambio as $cambio) {
+								if ($row[0] == $cambio) {
+									$label = $lblreemplazo[$i];
+									$i = 0;
+									break 2;
+								} else {
+									$label = $row[0];
+								}
+								$i = $i + 1;
+							}*/
+							
+							$form	=	$form.'
+							
+							<div class="form-group col-md-6 col-xs-6">
+								<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+								<div class="input-group col-md-12">
+									<p>
+										';
+							
+							$form	=	$form.$option;
+							
+							$form	=	$form.'		</p>
+								</div>
+							</div>
+							
+							';
+							
+						} else {
+							
+							if (strpos($row[1],"bit") !== false) {
+								$label = ucwords($label);
+								$campo = strtolower($row[0]);
+								
+								$activo = '';
+								if (mysql_result($resMod,0,$row[0])==1){
+									$activo = 'Si';
+								} else {
+									$activo = 'No';
+								}
+								
+								$form	=	$form.'
+								
+								<div class="form-group col-md-6 col-xs-6">
+									<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+									<div class="input-group col-md-12">
+										<p>'.$activo.'</p>
+									</div>
+								</div>
+								
+								';
+								
+								
+							} else {
+								
+								if (strpos($row[1],"date") !== false) {
+									$label = ucwords($label);
+									$campo = strtolower($row[0]);
+									/*
+									$form	=	$form.'
+									
+									<div class="form-group col-md-6">
+										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+										<div class="input-group date form_date col-md-6" data-date="" data-date-format="dd MM yyyy" data-link-field="'.$campo.'" data-link-format="yyyy-mm-dd">
+											<input class="form-control" value="'.mysql_result($resMod,0,$row[0]).'" size="50" type="text" value="" readonly>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+										</div>
+										<input type="hidden" name="'.$campo.'" id="'.$campo.'" value="'.mysql_result($resMod,0,$row[0]).'" />
+									</div>
+									
+									';
+									*/
+									
+									$form	=	$form.'
+									
+									<div class="form-group col-md-6 col-xs-6">
+										<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+										<div class="input-group col-md-6">
+											<p>'.mysql_result($resMod,0,$row[0]).'</p>
+										</div>
+										
+									</div>
+									
+									';
+									
+								} else {
+									
+									if (strpos($row[1],"time") !== false) {
+										$label = ucwords($label);
+										$campo = strtolower($row[0]);
+										
+										$form	=	$form.'
+										
+										<div class="form-group col-md-6 col-xs-6">
+											<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+											<div class="input-group bootstrap-timepicker col-md-6">
+												<p>'.mysql_result($resMod,0,$row[0]).'</p>
+											</div>
+											
+										</div>
+										
+										';
+										
+									} else {
+										if ((integer)(str_replace('varchar(','',$row[1])) > 200) {
+											$label = ucwords($label);
+											$campo = strtolower($row[0]);
+											
+											$form	=	$form.'
+											
+											<div class="form-group col-md-6 col-xs-6">
+												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+												<div class="input-group col-md-12">
+													<p>'.(htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5) == '' ? ".............." : htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5)).'</p>
+												</div>
+												
+											</div>
+											
+											';
+											
+										} else {
+											
+											if ($row[1] == 'MEDIUMTEXT') {
+											$label = ucwords($label);
+											$campo = strtolower($row[0]);
+											
+											$form	=	$form.'
+											
+											<div class="form-group col-md-12 col-xs-12">
+												<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+												<div class="input-group col-md-12 col-xs-12">
+													<p>'.(htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5) == '' ? ".............." : htmlspecialchars(mysql_result($resMod,0,$row[0]),ENT_HTML5)).'</p>
+													
+													
+												</div>
+												
+											</div>
+											
+											';
+											
+											} else {
+												$label = ucwords($label);
+												$campo = strtolower($row[0]);
+												
+												$form	=	$form.'
+												
+												<div class="form-group col-md-6 col-xs-6">
+													<label for="'.$campo.'" class="control-label" style="text-align:left">'.$label.'</label>
+													<div class="input-group col-md-12">
+														<p>'.(utf8_encode(mysql_result($resMod,0,$row[0])) == '' ? ".............." : utf8_encode(mysql_result($resMod,0,$row[0]))).'</p>
+													</div>
+												</div>
+												
+												';
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						
+					}
+				} else {
+	
+					$camposEscondido = '';	
+				}
+			}
+			
+			$formulario = $form."<br><br>".$camposEscondido;
+			
+			return $formulario;
+		}	
+	}
 
 	function TraerUsuario($nombre,$pass) {
 		

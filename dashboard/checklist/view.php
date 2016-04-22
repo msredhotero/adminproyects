@@ -61,9 +61,7 @@ $resState 	= $serviciosTasks->traerStateCheckList();
 $cadRef3 = '';
 while ($rowTT3 = mysql_fetch_array($resState)) {
 	if (mysql_result($resResultado,0,'refstatechecklist') == $rowTT3[0]) {
-		$cadRef3 = $cadRef3.'<option value="'.$rowTT3[0].'" selected>'.utf8_encode($rowTT3[1]).'</option>';
-	} else {
-		$cadRef3 = $cadRef3.'<option value="'.$rowTT3[0].'">'.utf8_encode($rowTT3[1]).'</option>';	
+		$cadRef3 = utf8_encode($rowTT3[1]);
 	}
 	
 }
@@ -73,19 +71,15 @@ $resEmp 	= $serviciosProyects->traerUser();
 $cadRef = '';
 while ($rowU = mysql_fetch_array($resEmp)) {
 	if (mysql_result($resResultado,0,'refuser')==$rowU[0]) {
-		$cadRef .= '<option value="'.$rowU['iduser'].'" selected>'.utf8_encode($rowU['fullname']).'</option>';
-	} else {
-		$cadRef .= '<option value="'.$rowU['iduser'].'">'.utf8_encode($rowU['fullname']).'</option>';
-	}
+		$cadRef =utf8_encode($rowU['fullname']);
+	} 
 }
 
 $resProyect 	= $serviciosProyects->traerProyectsPorUsuario($_SESSION['idusuario']);
 $cadVar2 = '';
 while ($rowP = mysql_fetch_array($resProyect)) {
 	if (mysql_result($resResultado,0,'refproject')==$rowP[0]) {
-		$cadVar2 = $cadVar2.'<option value="'.$rowP[0].'" selected>'.utf8_encode($rowP['title']).'</option>';
-	} else {
-		$cadVar2 = $cadVar2.'<option value="'.$rowP[0].'">'.utf8_encode($rowP['title']).'</option>';
+		$cadVar2 = utf8_encode($rowP['title']);
 	}
 }
 
@@ -115,7 +109,8 @@ $resTaskCheckListValidation = $serviciosTasks->traerTasksCheckListByCheckListUse
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
-/////////////////// Fechas para Suspender ///////////////////////
+$formulario 	= $serviciosFunciones->camposTablaVer($id, $idTabla,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
+//$formulario 	= $serviciosFunciones->camposTablaVer($id, "idsocio",$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_p'] != 1) {
@@ -193,6 +188,12 @@ if ($_SESSION['refroll_p'] != 1) {
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
         	
+            <div class="row" id="muestra">
+
+            <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" media="all"/>
+			<?php echo $formulario; ?>
+            </div>
+            
 			<div class="row" style="margin:10px 15px;">
 				<table class="table table-bordered table-responsive table-striped">
                 	<thead>
@@ -239,7 +240,35 @@ if ($_SESSION['refroll_p'] != 1) {
                 </table>
                 <input type="hidden" id="accion" name="accion" value="cargarTaskCheckListByTask"/>
                 <input type="hidden" id="checklist" name="checklist" value="<?php echo $id; ?>"/>
+            
+            <?php
+			
+			$labelPercentage = '';
+			$percentage = $serviciosTasks->traerPercentageCheckList($id,$_SESSION['idusuario']);
+			switch ($percentage) {
+				case $percentage >= 0 && $percentage < 34:
+					$labelPercentage = "progress-bar-danger";
+					break;
+				case $percentage >= 34 && $percentage < 67:
+					$labelPercentage = "progress-bar-warning";
+					break;
+				case $percentage >= 67 && $percentage <= 100:
+					$labelPercentage = "progress-bar-success";
+					break;
+				default:
+					$labelGanados = "";
+					break;
+			}
+			
+			?>
+            	<h3>Percentage of work completed</h3>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped <?php echo $labelPercentage; ?>" role="progressbar" aria-valuenow="<?php echo $percentage; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $percentage; ?>%;">
+                    <?php echo $percentage; ?>%
+                    </div>
+                </div>
             </div>
+            
             
             
             

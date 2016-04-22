@@ -305,6 +305,25 @@ $res = $this->query($sql,0);
 return $res;
 }
 
+function traerPercentageCheckList($id, $idUser) {
+	$res = $this->traerTasksCheckListByCheckListUserSinSession($id, $idUser);
+	$resTotal = $this->traerTasksCheckListByCheckListUserSinSession($id, $idUser);
+	$total = mysql_num_rows($resTotal);
+	$cant  = 0;
+	while ($row = mysql_fetch_array($res)) {
+		if (($row['yes'] == 'X') || ($row['no'] == 'X') || ($row['other'] == 'X')) {
+			$cant += 1;	
+		}
+	}
+	
+	if ($total != 0) {
+		return round($cant * 100 / $total,2);
+		//return $total;
+	}
+	
+	return 0;
+}
+
 /* Fin */
 
 function query($sql,$accion) {

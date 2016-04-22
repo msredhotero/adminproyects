@@ -82,11 +82,16 @@ $refCampo 	=  array("refuser","refstatechecklist","refproject");
 
 $resList 	= $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
 
-$cadList = '<ul class="list-inline">';
+$cadList = '<div class="col-md-6 col-xs-8"><table class="table table-bordered table-striped" id="table-6">
+			<thead>
+				<th>Task</th>
+				<th align="center">Select</th>
+			</thead>
+			<tbody>';
 while ($rowT = mysql_fetch_array($resList)) {
-	$cadList = $cadList."<li>".'<input id="task'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowT[0].'"><p>'.$rowT['task'].'</p>'."</li>";
+	$cadList = $cadList."<tr><td>".$rowT['task'].'</td><td class="cent"><div align="center"><input id="task'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowT[0].'" /></div></td>'."</tr>";
 }
-$cadList = $cadList."</ul>";
+$cadList = $cadList."</tbody></table></div>";
 
 
 
@@ -151,7 +156,23 @@ if ($_SESSION['refroll_p'] != 1) {
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
 
 	<style type="text/css">
+		#table-6 thead {
+		text-align: left;
+		}
+		#table-6 thead th {
+		background: -moz-linear-gradient(top, #F0F0F0 0, #DBDBDB 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #F0F0F0), color-stop(100%, #DBDBDB));
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F0F0F0', endColorstr='#DBDBDB', GradientType=0);
+		border: 1px solid #B0B0B0;
+		color: #444;
+		font-size: 16px;
+		font-weight: bold;
+		padding: 3px 10px;
+		}
 		
+		#table-6 tbody td .cent {
+			text-align:center;	
+		}
   
 		
 	</style>
@@ -190,7 +211,7 @@ if ($_SESSION['refroll_p'] != 1) {
 
             <div class="row">
             	<div class="form-group col-md-12">
-                	<label class="control-label" style="text-align:left" for="fechas">Select Tasks</label>
+                	
                     <div class="input-group col-md-12">
                     	<?php echo $cadList; ?>
                     </div>
