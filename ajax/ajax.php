@@ -148,6 +148,14 @@ break;
 case 'cargarTaskCheckListByTask':
 cargarTaskCheckListByTask($serviciosTasks);
 break;
+
+case 'traerPercentageCheckList':
+traerPercentageCheckList($serviciosTasks);
+break;
+
+case 'eliminarFotoTask':
+eliminarFotoTask($serviciosTasks);
+break;
 /* Fin */
 }
 
@@ -495,6 +503,7 @@ function insertarCheckList($serviciosTasks) {
 				$serviciosTasks->insertarTasksCheckList($res,$rowFS[0],0,0,0,'');
 			}
 		}
+
 		echo '';
 	} else {
 		echo 'There was an error inserting data';
@@ -611,11 +620,66 @@ function cargarTaskCheckListByTask($serviciosTasks) {
 			$observation = '';
 		}
 		
-		$serviciosTasks->cargarTasksCheckList($row['idtaskschecklist'],$yes,$no,$other,$observation);
+		$res = $serviciosTasks->cargarTasksCheckList($row['idtaskschecklist'],$yes,$no,$other,$observation);
+		if ($res == true) {
+			$imagenes = array("imagen1" => 'imagen1',
+							  "imagen2" => 'imagen2',
+							  "imagen3" => 'imagen3',
+							  "imagen4" => 'imagen4',
+							  "imagen5" => 'imagen5',
+							  "imagen6" => 'imagen6',
+							  "imagen7" => 'imagen7',
+							  "imagen8" => 'imagen8');
+	
+			foreach ($imagenes as $valor) {
+				$serviciosTasks->subirArchivo($valor,'galeria',$id);
+			}
+		} else {
+			echo 'There was an error modifying data';
+		}
 	}
 	
 	return '';
 	
+}
+
+function traerPercentageCheckList($serviciosTasks) {
+	$id		=	$_POST['id'];
+	session_start();
+	$idUser = $_SESSION['idusuario'];
+	
+	$labelPercentage = '';
+	$percentage = $serviciosTasks->traerPercentageCheckList($id,$idUser);
+	switch ($percentage) {
+		case $percentage >= 0 && $percentage < 34:
+			$labelPercentage = "progress-bar-danger";
+			break;
+		case $percentage >= 34 && $percentage < 67:
+			$labelPercentage = "progress-bar-warning";
+			break;
+		case $percentage >= 67 && $percentage <= 100:
+			$labelPercentage = "progress-bar-success";
+			break;
+		default:
+			$labelPercentage = "";
+			break;
+	}
+	$cad = '<h3>Percentage of work completed</h3>';
+	$cad .= '
+	
+	<div class="progress">
+		<div class="progress-bar progress-bar-striped '.$labelPercentage.'" role="progressbar" aria-valuenow="'.$percentage.'" aria-valuemin="0" aria-valuemax="100" style="width: '.$percentage.'%;">
+		'.$percentage.'%
+		</div>
+	</div>
+	';
+	
+	echo $cad;
+}
+
+function eliminarFotoTask($serviciosTasks) {
+	$id			=	$_POST['id'];
+	echo $serviciosTasks->eliminarFoto($id);
 }
 /* Fin */ 
 

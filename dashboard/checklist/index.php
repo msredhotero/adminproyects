@@ -270,8 +270,13 @@ if ($_SESSION['refroll_p'] != 1) {
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">List of Task</h4>
       </div>
-      <div class="modal-body tasklist">
+      <div class="modal-body">
+      	<div class="tasklist">
         
+        </div>
+        <div class="percentage">
+        
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -316,6 +321,22 @@ $(document).ready(function(){
 							
 					}
 			});
+			
+			$.ajax({
+					data:  {id: usersid,
+							accion: 'traerPercentageCheckList'},
+					url:   '../../ajax/ajax.php',
+					type:  'post',
+					beforeSend: function () {
+							
+					},
+					success:  function (response) {
+							$('.percentage').html(response);
+							
+					}
+			});
+			
+			
 			
 			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
 			//$(location).attr('href',url);

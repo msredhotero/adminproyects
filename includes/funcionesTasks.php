@@ -9,7 +9,181 @@ date_default_timezone_set('America/Buenos_Aires');
 
 class ServiciosTasks {
 
+function GUID()
+{
+    if (function_exists('com_create_guid') === true)
+    {
+        return trim(com_create_guid(), '{}');
+    }
 
+    return sprintf('%04X%04X-%04X-%04X-%04X-%04X%04X%04X', mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(16384, 20479), mt_rand(32768, 49151), mt_rand(0, 65535), mt_rand(0, 65535), mt_rand(0, 65535));
+}
+
+
+///**********  PARA SUBIR ARCHIVOS  ***********************//////////////////////////
+	function borrarDirecctorio($dir) {
+		array_map('unlink', glob($dir."/*.*"));	
+	
+	}
+	
+	function borrarArchivo($id,$archivo) {
+		$sql	=	"delete from imagestask where idfoto =".$id;
+		
+		$res =  unlink("./../archivostask/".$archivo);
+		if ($res)
+		{
+			$this->query($sql,0);	
+		}
+		return $res;
+	}
+	
+	
+	function existeArchivo($id,$nombre,$type) {
+		$sql		=	"select * from imagestask where refproyecto =".$id." and imagen = '".$nombre."' and type = '".$type."'";
+		$resultado  =   $this->query($sql,0);
+			   
+			   if(mysql_num_rows($resultado)>0){
+	
+				   return mysql_result($resultado,0,0);
+	
+			   }
+	
+			   return 0;	
+	}
+	
+	function sanear_string($string)
+{
+ 
+    $string = trim($string);
+ 
+    $string = str_replace(
+        array('á', 'à', 'ä', 'â', 'ª', 'Á', 'À', 'Â', 'Ä'),
+        array('a', 'a', 'a', 'a', 'a', 'A', 'A', 'A', 'A'),
+        $string
+    );
+ 
+    $string = str_replace(
+        array('é', 'è', 'ë', 'ê', 'É', 'È', 'Ê', 'Ë'),
+        array('e', 'e', 'e', 'e', 'E', 'E', 'E', 'E'),
+        $string
+    );
+ 
+    $string = str_replace(
+        array('í', 'ì', 'ï', 'î', 'Í', 'Ì', 'Ï', 'Î'),
+        array('i', 'i', 'i', 'i', 'I', 'I', 'I', 'I'),
+        $string
+    );
+ 
+    $string = str_replace(
+        array('ó', 'ò', 'ö', 'ô', 'Ó', 'Ò', 'Ö', 'Ô'),
+        array('o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'),
+        $string
+    );
+ 
+    $string = str_replace(
+        array('ú', 'ù', 'ü', 'û', 'Ú', 'Ù', 'Û', 'Ü'),
+        array('u', 'u', 'u', 'u', 'U', 'U', 'U', 'U'),
+        $string
+    );
+ 
+    $string = str_replace(
+        array('ñ', 'Ñ', 'ç', 'Ç'),
+        array('n', 'N', 'c', 'C',),
+        $string
+    );
+ 
+ 
+ 
+    return $string;
+}
+
+	function subirArchivo($file,$carpeta,$id) {
+		$dir_destino = '../archivostask/'.$carpeta.'/'.$id.'/';
+		$imagen_subida = $dir_destino . $this->sanear_string(str_replace(' ','',basename($_FILES[$file]['name'])));
+		
+		$noentrar = '../imagenes/index.php';
+		$nuevo_noentrar = '../archivostask/'.$carpeta.'/'.$id.'/'.'index.php';
+		
+		if (!file_exists($dir_destino)) {
+			mkdir($dir_destino, 0777);
+		}
+		
+		 
+		if(!is_writable($dir_destino)){
+			
+			echo "no tiene permisos";
+			
+		}	else	{
+			if ($_FILES[$file]['tmp_name'] != '') {
+				if(is_uploaded_file($_FILES[$file]['tmp_name'])){
+					/*echo "Archivo ". $_FILES['foto']['name'] ." subido con éxtio.\n";
+					echo "Mostrar contenido\n";
+					echo $imagen_subida;*/
+					if (move_uploaded_file($_FILES[$file]['tmp_name'], $imagen_subida)) {
+						
+						$archivo = $this->sanear_string($_FILES[$file]["name"]);
+						$tipoarchivo = $_FILES[$file]["type"];
+						
+						if ($this->existeArchivo($id,$archivo,$tipoarchivo) == 0) {
+							$sql	=	"insert into imagestask(idfoto,refproyecto,imagen,type) values ('',".$id.",'".str_replace(' ','',$archivo)."','".$tipoarchivo."')";
+							$this->query($sql,1);
+						}
+						echo "";
+						
+						copy($noentrar, $nuevo_noentrar);
+		
+					} else {
+						echo "Possible file upload attack!\n";
+					}
+				}else{
+					if ($_FILES[$file]['error'] != 0) {
+						echo "Possible attack uploaded file: ";
+						echo "File name '". $_FILES[$file]['tmp_name'] . "'.";
+					}
+				}
+			}
+		}	
+	}
+
+
+	
+	function TraerFotosRelacion($id) {
+		$sql    =   "select 'galeria',s.idtask,f.imagen,f.idfoto,f.type
+							from tasks s
+							
+							inner
+							join imagestask f
+							on	s.idtask = f.refproyecto
+
+							where s.idtask = ".$id;
+		$result =   $this->query($sql, 0);
+		return $result;
+	}
+	
+	
+	function eliminarFoto($id)
+	{
+		
+		$sql		=	"select concat('galeria','/',s.idtask,'/',f.imagen) as archivo
+							from tasks s
+							
+							inner
+							join imagestask f
+							on	s.idtask = f.refproyecto
+
+							where f.idfoto =".$id;
+		$resImg		=	$this->query($sql,0);
+		
+		$res 		=	$this->borrarArchivo($id,mysql_result($resImg,0,0));
+		
+		if ($res == false) {
+			return 'Error deleting data';
+		} else {
+			return '';
+		}
+	}
+
+/* fin archivos */
 
 
 
@@ -119,7 +293,7 @@ $res = $serviciosTasks->insertarStateCheckList($status,$active);
 if ((integer)$res > 0) {
 echo '';
 } else {
-echo 'Huvo un error al insertar datos';
+echo 'There was an error inserting data';
 }
 }
 function modificarStateCheckList($serviciosTasks) {
@@ -134,7 +308,7 @@ $res = $serviciosTasks->modificarStateCheckList($id,$status,$active);
 if ($res == true) {
 echo '';
 } else {
-echo 'Huvo un error al modificar datos';
+echo 'There was an error modifying data';
 }
 }
 function eliminarStateCheckList($serviciosTasks) {
@@ -311,7 +485,7 @@ function traerPercentageCheckList($id, $idUser) {
 	$total = mysql_num_rows($resTotal);
 	$cant  = 0;
 	while ($row = mysql_fetch_array($res)) {
-		if (($row['yes'] == 'X') || ($row['no'] == 'X') || ($row['other'] == 'X')) {
+		if ($row['yes'] == 'X') {
 			$cant += 1;	
 		}
 	}
