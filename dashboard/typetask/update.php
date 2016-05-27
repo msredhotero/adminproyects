@@ -24,64 +24,47 @@ $serviciosTasks		 	= new ServiciosTasks();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"Task",$_SESSION['refroll_p'],'');
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"Type of Task",$_SESSION['refroll_p'],'');
+
+
+$id = $_GET['id'];
+
+$resResultado = $serviciosTasks->traerTypeTaskPorId($id);
 
 
 /////////////////////// Opciones pagina ///////////////////////////////////////////////
-$singular = "Task";
+$singular = "Type of Task";
 
-$plural = "Tasks";
+$plural = "Type of Task";
 
-$eliminar = "eliminarTasks";
+$eliminar = "eliminarTypeTask";
 
-$insertar = "insertarTasks";
+$modificar = "modificarTypeTask";
+
+$idTabla = "idtypetask";
 
 $tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "tasks";
+$tabla 			= "typetask";
 
-$lblCambio	 	= array("refuser","reftypetask");
+$lblCambio	 	= array("refuser","typetask");
 $lblreemplazo	= array("User","Type of Task");
+
 
 
 $cadRef = '<option value="'.$_SESSION['idusuario'].'" selected>'.utf8_encode($_SESSION['nombre_p']).'</option>';
 
-$resVar2 	= $serviciosTasks->traerTypeTaskByUser($_SESSION['idusuario']);
-
-$cadRef3 = '';
-while ($rowTT3 = mysql_fetch_array($resVar2)) {
-	$cadRef3 = $cadRef3.'<option value="'.$rowTT3[0].'">'.utf8_encode($rowTT3[1]).'</option>';
-	
-}
-
-
-$refdescripcion = array(0 => $cadRef, 1=> $cadRef3);
-$refCampo 	=  array("refuser","reftypetask");
+$refdescripcion = array(0 => $cadRef);
+$refCampo 	=  array("refuser");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+/////////////////// Fechas para Suspender ///////////////////////
 
 
-
-/////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Task</th>
-					<th>Type of Task</th>
-					<th>Order</th>
-					<th>Value</th>
-					<th>Active</th>";
-
-//////////////////////////////////////////////  FIN de los opciones //////////////////////////
-
-
-$resList 	= $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
-$order = mysql_num_rows($resList) + 1;	
-
-$formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
-
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerTasksByUser($_SESSION['idusuario']),96);
-
+$formulario 	= $serviciosFunciones->camposTablaModificar($id, $idTabla, $modificar,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
 
 if ($_SESSION['refroll_p'] != 1) {
@@ -102,6 +85,8 @@ if ($_SESSION['refroll_p'] != 1) {
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
 
 <title><?php echo $tituloWeb; ?></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,15 +136,15 @@ if ($_SESSION['refroll_p'] != 1) {
 
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Load <?php echo $plural; ?></p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Update <?php echo $singular; ?></p>
         	
         </div>
     	<div class="cuerpoBox">
         	<form class="form-inline formulario" role="form">
-        	<div class="row">
+        	
+			<div class="row">
 			<?php echo $formulario; ?>
             </div>
-
             
             
             <div class='row' style="margin-left:25px; margin-right:25px;">
@@ -175,7 +160,13 @@ if ($_SESSION['refroll_p'] != 1) {
                 <div class="col-md-12">
                 <ul class="list-inline" style="margin-top:15px;">
                     <li>
-                        <button type="button" class="btn btn-primary" id="cargar" style="margin-left:0px;">Save</button>
+                        <button type="button" class="btn btn-warning" id="cargar" style="margin-left:0px;">Update</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-danger varborrar" id="<?php echo $id; ?>" style="margin-left:0px;">Delete</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn btn-default volver" style="margin-left:0px;">Back</button>
                     </li>
                 </ul>
                 </div>
@@ -184,27 +175,12 @@ if ($_SESSION['refroll_p'] != 1) {
     	</div>
     </div>
     
-    <div class="boxInfoLargo">
-        <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;"><?php echo $plural; ?> Charged</p>
-        	
-        </div>
-    	<div class="cuerpoBox">
-        	<?php echo $lstCargados; ?>
-    	</div>
-    </div>
-    
-    
-
-    
     
    
 </div>
 
 
 </div>
-
-
 
 <div id="dialog2" title="Delete <?php echo $singular; ?>">
     	<p>
@@ -214,22 +190,21 @@ if ($_SESSION['refroll_p'] != 1) {
         <p><strong>Important: </strong>If you delete the <?php echo $singular; ?> will lose all data in this</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+
+
 <script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
 <script src="../../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#example').DataTable( {
-        "order": [[ 3, "asc" ]]
-    } );
-	
-	
-	//seteo el order
-	$('#order').val(<?php echo $order; ?>);
 
+	$('.volver').click(function(event){
+		 
+		url = "index.php";
+		$(location).attr('href',url);
+	});//fin del boton modificar
 	
-	
-	$("#example").on("click",'.varborrar', function(){
+	$('.varborrar').click(function(event){
 		  usersid =  $(this).attr("id");
 		  if (!isNaN(usersid)) {
 			$("#idEliminar").val(usersid);
@@ -243,28 +218,8 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
-	$("#example").on("click",'.varmodificar', function(){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			
-			url = "update.php?id=" + usersid;
-			$(location).attr('href',url);
-		  } else {
-			alert("Error redo action.");	
-		  }
-	});//fin del boton modificar
-	
-	$("#example").on("click",'.varorder', function(){
-		  usersid =  $(this).attr("id");
-		  if (!isNaN(usersid)) {
-			
-			url = "order.php?id=" + usersid;
-			$(location).attr('href',url);
-		  } else {
-			alert("Error redo action.");	
-		  }
-	});//fin del boton modificar
 
+	
 	 $( "#dialog2" ).dialog({
 		 	
 			    autoOpen: false,
@@ -302,13 +257,13 @@ $(document).ready(function(){
 		 
 		 
 	 		}); //fin del dialogo para eliminar
-			
+	
+	
 	<?php 
 		echo $serviciosHTML->validacion($tabla);
 	
 	?>
 	
-
 	
 	
 	//al enviar el formulario
@@ -341,7 +296,7 @@ $(document).ready(function(){
                                             $(".alert").removeClass("alert-danger");
 											$(".alert").removeClass("alert-info");
                                             $(".alert").addClass("alert-success");
-                                            $(".alert").html('<strong>Ok!</strong> Will successfully charge the <strong><?php echo $singular; ?></strong>. ');
+                                            $(".alert").html('<strong>Ok!</strong> Was modified Successfully the <strong><?php echo $singular; ?></strong>. ');
 											$(".alert").delay(3000).queue(function(){
 												/*aca lo que quiero hacer 
 												  después de los 2 segundos de retraso*/
@@ -349,8 +304,8 @@ $(document).ready(function(){
 												
 											});
 											$("#load").html('');
-											url = "index.php";
-											$(location).attr('href',url);
+											//url = "index.php";
+											//$(location).attr('href',url);
                                             
 											
                                         } else {

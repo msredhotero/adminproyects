@@ -40,7 +40,7 @@ class Servicios {
 				$idresultados = "resultadosprincipal";
 				break;
 			case 96:
-				$cantidad = 4;
+				$cantidad = 5;
 				$classMod = 'varmodificar';
 				$classVer = 'varorder';
 				$lblVer	  = 'Change Order';

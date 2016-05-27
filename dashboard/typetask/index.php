@@ -24,52 +24,40 @@ $serviciosTasks		 	= new ServiciosTasks();
 $fecha = date('Y-m-d');
 
 //$resProductos = $serviciosProductos->traerProductosLimite(6);
-$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"Task",$_SESSION['refroll_p'],'');
+$resMenu = $serviciosHTML->menu(utf8_encode($_SESSION['nombre_p']),"Type of Task",$_SESSION['refroll_p'],'');
 
 
 /////////////////////// Opciones pagina ///////////////////////////////////////////////
-$singular = "Task";
+$singular = "Type of Task";
 
-$plural = "Tasks";
+$plural = "Type of Task";
 
-$eliminar = "eliminarTasks";
+$eliminar = "eliminarTypeTask";
 
-$insertar = "insertarTasks";
+$insertar = "insertarTypeTask";
 
 $tituloWeb = "Restricted access: B-Projects";
 //////////////////////// Fin opciones ////////////////////////////////////////////////
 
 
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
-$tabla 			= "tasks";
+$tabla 			= "typetask";
 
-$lblCambio	 	= array("refuser","reftypetask");
+$lblCambio	 	= array("refuser","typetask");
 $lblreemplazo	= array("User","Type of Task");
 
 
 $cadRef = '<option value="'.$_SESSION['idusuario'].'" selected>'.utf8_encode($_SESSION['nombre_p']).'</option>';
 
-$resVar2 	= $serviciosTasks->traerTypeTaskByUser($_SESSION['idusuario']);
-
-$cadRef3 = '';
-while ($rowTT3 = mysql_fetch_array($resVar2)) {
-	$cadRef3 = $cadRef3.'<option value="'.$rowTT3[0].'">'.utf8_encode($rowTT3[1]).'</option>';
-	
-}
-
-
-$refdescripcion = array(0 => $cadRef, 1=> $cadRef3);
-$refCampo 	=  array("refuser","reftypetask");
+$refdescripcion = array(0 => $cadRef);
+$refCampo 	=  array("refuser");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
 
 
 
 /////////////////////// Opciones para la creacion del view  /////////////////////
-$cabeceras 		= "	<th>Task</th>
-					<th>Type of Task</th>
-					<th>Order</th>
-					<th>Value</th>
+$cabeceras 		= "	<th>Type of Task</th>
 					<th>Active</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
@@ -80,7 +68,7 @@ $order = mysql_num_rows($resList) + 1;
 
 $formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerTasksByUser($_SESSION['idusuario']),96);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosTasks->traerTypeTaskByUser($_SESSION['idusuario']),2);
 
 
 
@@ -219,13 +207,8 @@ if ($_SESSION['refroll_p'] != 1) {
 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#example').DataTable( {
-        "order": [[ 3, "asc" ]]
-    } );
+	$('#example').DataTable();
 	
-	
-	//seteo el order
-	$('#order').val(<?php echo $order; ?>);
 
 	
 	

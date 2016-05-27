@@ -190,18 +190,18 @@ function GUID()
 
 /* PARA Tasks */
 
-function insertarTasks($task,$order,$value,$active,$refuser) {
-$sql = "insert into tasks(idtask,task,`order`,value,active,refuser)
-values ('','".utf8_decode($task)."',".$order.",".$value.",".$active.",".$refuser.")";
+function insertarTasks($task,$order,$value,$active,$reftypetask,$refuser) {
+$sql = "insert into tasks(idtask,task,`order`,value,active,reftypetask,refuser)
+values ('','".utf8_decode($task)."',".$order.",".$value.",".$active.",".$reftypetask.", ".$refuser.")";
 $res = $this->query($sql,1);
 return $res;
 }
 
 
-function modificarTasks($id,$task,$order,$value,$active,$refuser) {
+function modificarTasks($id,$task,$order,$value,$active,$reftypetask,$refuser) {
 $sql = "update tasks
 set
-task = '".utf8_decode($task)."',`order` = ".$order.",value = ".$value.",active = ".$active.",refuser = ".$refuser."
+task = '".utf8_decode($task)."',`order` = ".$order.",value = ".$value.",active = ".$active.",refuser = ".$refuser.", reftypetask = ".$reftypetask."
 where idtask =".$id;
 $res = $this->query($sql,0);
 return $res;
@@ -239,22 +239,23 @@ function reOrdenarOrden($idUser) {
 }
 
 function traerTasks() {
-$sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser from tasks order by `order` ";
+$sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active, reftypetask,refuser from tasks order by `order` ";
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function traerTasksPorId($id) {
-$sql = "select idtask,task,`order`,value,active,refuser from tasks where idtask =".$id;
+$sql = "select idtask,task,`order`,value,active,reftypetask,refuser from tasks where idtask =".$id;
 $res = $this->query($sql,0);
 return $res;
 }
 
 function traerTasksByUser($idUser) {
-$sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser 
-		from tasks 
-		where refuser = ".$idUser."
+$sql = "select t.idtask,t.task, tt.typetask,t.`order`,t.value,(case when t.active = 1 then 'Yes' else 'No' end) as active,t.refuser 
+		from tasks t
+		inner join typetask tt on t.reftypetask = tt.idtypetask
+		where t.refuser = ".$idUser."
 		order by idtask asc";
 $res = $this->query($sql,0);
 return $res;
@@ -496,6 +497,56 @@ function traerPercentageCheckList($id, $idUser) {
 	}
 	
 	return 0;
+}
+
+/* Fin */
+
+
+
+/* PARA TypeTask */
+
+function insertarTypeTask($typetask,$active,$refuser) {
+$sql = "insert into typetask(idtypetask,typetask,active,refuser)
+values ('','".utf8_decode($typetask)."',".$active.",".$refuser.")";
+$res = $this->query($sql,1);
+return $res;
+}
+
+
+function modificarTypeTask($id,$typetask,$active,$refuser) {
+$sql = "update typetask
+set
+typetask = '".utf8_decode($typetask)."',active = ".$active.",refuser = ".$refuser."
+where idtypetask =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function eliminarTypeTask($id) {
+$sql = "delete from typetask where idtypetask =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerTypeTask() {
+$sql = "select idtypetask,typetask,active,refuser from typetask order by 1";
+$res = $this->query($sql,0);
+return $res;
+}
+
+
+function traerTypeTaskPorId($id) {
+$sql = "select idtypetask,typetask,active,refuser from typetask where idtypetask =".$id;
+$res = $this->query($sql,0);
+return $res;
+}
+
+function traerTypeTaskByUser($idUser) {
+$sql = "select idtypetask,typetask,(case when active = 1 then 'Yes' else 'No' end) as active,refuser from typetask where refuser =".$idUser;
+$res = $this->query($sql,0);
+return $res;
 }
 
 /* Fin */

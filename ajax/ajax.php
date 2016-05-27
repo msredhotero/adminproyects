@@ -157,6 +157,21 @@ case 'eliminarFotoTask':
 eliminarFotoTask($serviciosTasks);
 break;
 /* Fin */
+
+
+/* PARA TypeTask */
+case 'insertarTypeTask':
+insertarTypeTask($serviciosTasks);
+break;
+case 'modificarTypeTask':
+modificarTypeTask($serviciosTasks);
+break;
+case 'eliminarTypeTask':
+eliminarTypeTask($serviciosTasks);
+break;
+
+/* Fin */
+
 }
 
 
@@ -417,7 +432,9 @@ $active = 1;
 $active = 0;
 }
 $refuser = $_POST['refuser'];
-$res = $serviciosTasks->insertarTasks($task,$order,$value,$active,$refuser);
+$reftypetask = $_POST['reftypetask'];
+
+$res = $serviciosTasks->insertarTasks($task,$order,$value,$active,$reftypetask,$refuser);
 if ((integer)$res > 0) {
 echo '';
 } else {
@@ -435,7 +452,10 @@ $active = 1;
 $active = 0;
 }
 $refuser = $_POST['refuser'];
-$res = $serviciosTasks->modificarTasks($id,$task,$order,$value,$active,$refuser);
+$reftypetask = $_POST['reftypetask'];
+
+
+$res = $serviciosTasks->modificarTasks($id,$task,$order,$value,$active,$reftypetask,$refuser);
 if ($res == true) {
 echo '';
 } else {
@@ -681,6 +701,47 @@ function eliminarFotoTask($serviciosTasks) {
 	$id			=	$_POST['id'];
 	echo $serviciosTasks->eliminarFoto($id);
 }
+/* Fin */ 
+
+
+/* PARA TypeTask */
+function insertarTypeTask($serviciosTasks) {
+$typetask = $_POST['typetask'];
+if (isset($_POST['active'])) {
+$active = 1;
+} else {
+$active = 0;
+}
+$refuser = $_POST['refuser'];
+$res = $serviciosTasks->insertarTypeTask($typetask,$active,$refuser);
+if ((integer)$res > 0) {
+echo '';
+} else {
+echo 'Huvo un error al insertar datos';
+}
+}
+function modificarTypeTask($serviciosTasks) {
+$id = $_POST['id'];
+$typetask = $_POST['typetask'];
+if (isset($_POST['active'])) {
+$active = 1;
+} else {
+$active = 0;
+}
+$refuser = $_POST['refuser'];
+$res = $serviciosTasks->modificarTypeTask($id,$typetask,$active,$refuser);
+if ($res == true) {
+echo '';
+} else {
+echo 'Huvo un error al modificar datos';
+}
+}
+function eliminarTypeTask($serviciosTasks) {
+$id = $_POST['id'];
+$res = $serviciosTasks->eliminarTypeTask($id);
+echo $res;
+}
+
 /* Fin */ 
 
 /////////////////////////////////////////////////////***** FIN **********/////////////////////////////////////////////////////
