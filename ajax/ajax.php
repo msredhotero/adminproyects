@@ -505,11 +505,10 @@ function insertarCheckList($serviciosTasks) {
 	$refuser = $_POST['refuser'];
 	$enddate = $_POST['enddate'];
 	$alarm = $_POST['alarm'];
-	$typetask = $_POST['typetask'];
+	$typetask = $_POST['reftypetask'];
 	
 	session_start();
 	
-	$refUser = $_POST['typetask'];
 	
 	$refstatechecklist = $_POST['refstatechecklist'];
 	

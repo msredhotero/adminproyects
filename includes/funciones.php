@@ -23,6 +23,7 @@ class Servicios {
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
 				$classVer = '';
+				$tabla = 'example';
 				break;
 			case 98:
 				$cantidad = 6;
@@ -31,6 +32,7 @@ class Servicios {
 				$lblVer	  = 'View';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
+				$tabla = 'example';
 				break;
 			case 97:
 				$cantidad = 3;
@@ -38,6 +40,7 @@ class Servicios {
 				$classEli = 'varborrarprincipal';
 				$classVer = '';
 				$idresultados = "resultadosprincipal";
+				$tabla = 'example';
 				break;
 			case 96:
 				$cantidad = 5;
@@ -46,6 +49,7 @@ class Servicios {
 				$lblVer	  = 'Change Order';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
+				$tabla = 'example';
 				break;
 			case 95:
 				$cantidad = 9;
@@ -56,6 +60,7 @@ class Servicios {
 				$lblTask  = 'Task List';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
+				$tabla = 'example2';
 				break;
 			case 94:
 				$cantidad = 8;
@@ -64,12 +69,14 @@ class Servicios {
 				$lblVer	  = 'View';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
+				$tabla = 'example';
 				break;
 			default:
 				$classMod = 'varmodificar';
 				$classEli = 'varborrar';
 				$classVer = '';
 				$idresultados = "resultados";
+				$tabla = 'example';
 		}
 		/*if ($cantidad == 99) {
 			$cantidad = 5;
@@ -170,7 +177,7 @@ class Servicios {
 		}
 		
 		$cadView = $cadView.'
-			<table class="table table-striped table-responsive" id="example">
+			<table class="table table-striped table-responsive" id="'.$tabla.'">
             	<thead>
                 	<tr>
                     	'.$cabeceras.'

@@ -344,7 +344,7 @@ return $res;
 
 /* PARA CheckList */
 
-function insertarCheckList($refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
+function insertarCheckList($refproject,$refuser,$enddate,$alarm,$reftypetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
 $sql = "insert into checklist(idchecklist,refproject,refuser,enddate,alarm,reftypetask,refstatechecklist,executed,timelimitfinished,executedincomplete)
 values ('',".$refproject.",".$refuser.",'".utf8_decode($enddate)."','".utf8_decode($alarm)."',".$reftypetask.",".$refstatechecklist.",".$executed.",".$timelimitfinished.",".$executedincomplete.")";
 $res = $this->query($sql,1);

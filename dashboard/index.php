@@ -12,12 +12,13 @@ include ('../includes/funciones.php');
 include ('../includes/funcionesUsuarios.php');
 include ('../includes/funcionesHTML.php');
 include ('../includes/funcionesProyects.php');
+include ('../includes/funcionesTasks.php');
 
 $serviciosFunciones 	= new Servicios();
 $serviciosUsuario 		= new ServiciosUsuarios();
 $serviciosHTML 			= new ServiciosHTML();
 $serviciosProyect 		= new ServiciosProyects();
-
+$serviciosTasks		 	= new ServiciosTasks();
 
 $fecha = date('Y-m-d');
 
@@ -40,11 +41,30 @@ $cabeceras 		= "	<th>Order</th>
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+
+/////////////////////// Opciones para la creacion del view  /////////////////////
+$cabeceras2 		= "	<th>Projet</th>
+					<th>User</th>
+					<th>End Date</th>
+					<th>Alarm</th>
+					<th>Type of Task</th>
+					<th>Status</th>
+					<th>Executed</th>
+					<th>Time Limit Finished</th>
+					<th>Executed Incomplete</th>";
+
+//////////////////////////////////////////////  FIN de los opciones //////////////////////////
+
 if ($_SESSION['idroll_p'] != 1) {
 	$lstCargados 	= $serviciosFunciones->camposTablaViewNoAction($cabeceras,$serviciosProyect->traerProyectsPorUsuario($_SESSION['idusuario']),98);
+	$lstCargados2 	= $serviciosFunciones->camposTablaView($cabeceras2,$serviciosTasks->traerCheckListByUser($_SESSION['idusuario']),95);
+
 } else {
 	$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyect->traerProyects(),98);
+	$lstCargados2 	= $serviciosFunciones->camposTablaView($cabeceras2,$serviciosTasks->traerCheckListByUser($_SESSION['idusuario']),95);
+
 }
+
 
 
 ?>
@@ -116,10 +136,19 @@ if ($_SESSION['idroll_p'] != 1) {
 
 <h3>Dashboard</h3>
     
+    <div class="boxInfoLargo">
+        <div id="headBoxInfo">
+        	<p style="color: #fff; font-size:18px; height:16px;">CheckList Charged</p>
+        	
+        </div>
+    	<div class="cuerpoBox">
+        	<?php echo $lstCargados2; ?>
+    	</div>
+    </div>
     
     <div class="boxInfoLargo">
         <div id="headBoxInfo">
-        	<p style="color: #fff; font-size:18px; height:16px;">Proyects Charged</p>
+        	<p style="color: #fff; font-size:18px; height:16px;">Projects Charged</p>
         	
         </div>
     	<div class="cuerpoBox">
@@ -163,16 +192,47 @@ if ($_SESSION['idroll_p'] == 1) {
         <p><strong>Important: </strong>If you delete the Project will lose all data in this</p>
         <input type="hidden" value="" id="idEliminar" name="idEliminar">
 </div>
+
+<div id="dialog3" title="Delete CheckList">
+    	<p>
+        	<span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            ¿Are you sure you want to delete the CheckList?.<span id="proveedorEli"></span>
+        </p>
+        <p><strong>Important: </strong>If you delete the CheckList will lose all data in this</p>
+        <input type="hidden" value="" id="idEliminar" name="idEliminar">
+</div>
 <?php
 }
 ?>
-
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">List of Task</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="tasklist">
+        
+        </div>
+        <div class="percentage">
+        
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
 <script src="../bootstrap/js/dataTables.bootstrap.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#example').dataTable();
+	$('#example2').dataTable();
 <?php
 	
 if ($_SESSION['idroll_p'] == 1) {
@@ -267,6 +327,130 @@ if ($_SESSION['idroll_p'] == 1) {
 			alert("Error redo action.");	
 		  }
 	});//fin del boton ver
+	
+	
+	
+	/*userasignates*/
+	$("#example2").on("click",'.vartask', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+
+			$.ajax({
+					data:  {id: usersid, 
+							accion: 'traerListTaskByCheckList'},
+					url:   '../ajax/ajax.php',
+					type:  'post',
+					beforeSend: function () {
+							
+					},
+					success:  function (response) {
+							$('.tasklist').html(response);
+							
+					}
+			});
+			
+			$.ajax({
+					data:  {id: usersid,
+							accion: 'traerPercentageCheckList'},
+					url:   '../ajax/ajax.php',
+					type:  'post',
+					beforeSend: function () {
+							
+					},
+					success:  function (response) {
+							$('.percentage').html(response);
+							
+					}
+			});
+			
+			
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton eliminar
+	
+	
+	$("#example2").on("click",'.varborrar', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			$("#idEliminar").val(usersid);
+			$("#dialog3").dialog("open");
+
+			
+			//url = "../clienteseleccionado/index.php?idcliente=" + usersid;
+			//$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton eliminar
+	
+	
+	
+	$("#example2").on("click",'.varmodificar', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			
+			url = "checklist/update.php?id=" + usersid;
+			$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton modificar
+	
+	
+	
+	$("#example2").on("click",'.varver', function(){
+		  usersid =  $(this).attr("id");
+		  if (!isNaN(usersid)) {
+			
+			url = "checklist/view.php?id=" + usersid;
+			$(location).attr('href',url);
+		  } else {
+			alert("Error redo action.");	
+		  }
+	});//fin del boton modificar
+
+	 $( "#dialog3" ).dialog({
+		 	
+			    autoOpen: false,
+			 	resizable: false,
+				width:600,
+				height:240,
+				modal: true,
+				buttons: {
+				    "Delete": function() {
+	
+						$.ajax({
+									data:  {id: $('#idEliminar').val(), accion: 'eliminarCheckList'},
+									url:   '../ajax/ajax.php',
+									type:  'post',
+									beforeSend: function () {
+											
+									},
+									success:  function (response) {
+											url = "index.php";
+											$(location).attr('href',url);
+											
+									}
+							});
+						$( this ).dialog( "close" );
+						$( this ).dialog( "close" );
+							$('html, body').animate({
+	           					scrollTop: '1000px'
+	       					},
+	       					1500);
+				    },
+				    Cancel: function() {
+						$( this ).dialog( "close" );
+				    }
+				}
+		 
+		 
+	 		}); //fin del dialogo para eliminar
+			
 
 });
 </script>
