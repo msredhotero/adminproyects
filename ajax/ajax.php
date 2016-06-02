@@ -129,6 +129,9 @@ break;
 case 'modificarTaskOrder':
 modificarTaskOrder($serviciosTasks);
 break;
+case 'buscarOrden':
+buscarOrden($serviciosTasks);
+break;
 /* Fin */
 
 /* PARA CheckList */
@@ -155,6 +158,10 @@ break;
 
 case 'eliminarFotoTask':
 eliminarFotoTask($serviciosTasks);
+break;
+
+case 'searchTaskByUserType':
+searchTaskByUserType($serviciosTasks);
 break;
 /* Fin */
 
@@ -479,6 +486,17 @@ function modificarTaskOrder($serviciosTasks) {
 		echo 'There was an error modifying data';
 	}
 }
+
+function buscarOrden($serviciosTasks) {
+	$idUser		= 	$_POST['refuser'];
+	$idType		=	$_POST['reftype'];
+	
+	$resList 	= $serviciosTasks->traerTasksByUserType($idUser,$idType);
+	
+	$order = mysql_num_rows($resList) + 1;
+	
+	echo $order;
+}
 /* Fin */ 
 
 /* PARA CheckList */
@@ -700,6 +718,21 @@ function traerPercentageCheckList($serviciosTasks) {
 function eliminarFotoTask($serviciosTasks) {
 	$id			=	$_POST['id'];
 	echo $serviciosTasks->eliminarFoto($id);
+}
+
+function searchTaskByUserType($serviciosTasks) {
+	$idUser		= 	$_POST['refuser'];
+	$idType		=	$_POST['reftype'];
+	
+	$resList 	= $serviciosTasks->traerTasksByUserType($idUser,$idType);
+	
+	$cadList = '';
+	while ($rowT = mysql_fetch_array($resList)) {
+		$cadList = $cadList."<tr><td>".$rowT['task'].'</td><td class="cent"><div align="center"><input id="task'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowT[0].'" checked/></div></td>'."</tr>";
+	}
+
+	
+	echo $cadList;
 }
 /* Fin */ 
 

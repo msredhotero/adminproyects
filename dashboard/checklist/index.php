@@ -43,7 +43,7 @@ $tituloWeb = "Restricted access: B-Projects";
 /////////////////////// Opciones para la creacion del formulario  /////////////////////
 $tabla 			= "checklist";
 
-$lblCambio	 	= array("refuser","refproject","refstatechecklist","enddate","timelimitfinished","executedincomplete","typetask");
+$lblCambio	 	= array("refuser","refproject","refstatechecklist","enddate","timelimitfinished","executedincomplete","reftypetask");
 $lblreemplazo	= array("User","Projet","Status","End Date","Time limit finished","Executed Incomplete","Type of Task");
 
 
@@ -67,29 +67,47 @@ while ($rowU = mysql_fetch_array($resEmp)) {
 }
 
 $resProyect 	= $serviciosProyects->traerProyectsPorUsuario($_SESSION['idusuario']);
-$cadVar2 = '';
+$cadVar1 = '';
 while ($rowP = mysql_fetch_array($resProyect)) {
 
-	$cadVar2 = $cadVar2.'<option value="'.$rowP[0].'">'.utf8_encode($rowP['title']).'</option>';
+	$cadVar1 = $cadVar1.'<option value="'.$rowP[0].'">'.utf8_encode($rowP['title']).'</option>';
 
+}
+
+
+$resVar3 	= $serviciosTasks->traerTypeTaskByUser($_SESSION['idusuario']);
+
+$cadRef4 = '';
+while ($rowTT3 = mysql_fetch_array($resVar3)) {
+	$cadRef4 = $cadRef4.'<option value="'.$rowTT3[0].'">'.utf8_encode($rowTT3[1]).'</option>';
 	
 }
 
-$refdescripcion = array(0 => $cadRef,1=>$cadRef3,2=>$cadVar2);
-$refCampo 	=  array("refuser","refstatechecklist","refproject");
+
+$refdescripcion = array(0 => $cadRef,1=>$cadRef3,2=>$cadVar1,3=>$cadRef4);
+$refCampo 	=  array("refuser","refstatechecklist","refproject","reftypetask");
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+$typeT		= $serviciosTasks->traerTypeTaskByUser($_SESSION['idusuario']);
 
-$resList 	= $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
+if (mysql_num_rows($typeT)>0) {
+	$RefTypeT = mysql_result($typeT,0,0);
+} else {
+	$RefTypeT = 0;
+}
+
+$resList 	= $serviciosTasks->traerTasksByUserType($_SESSION['idusuario'],$RefTypeT);
+
+//$resList 	= $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
 
 $cadList = '<div class="col-md-6 col-xs-8"><table class="table table-bordered table-striped" id="table-6">
 			<thead>
 				<th>Task</th>
 				<th align="center">Select</th>
 			</thead>
-			<tbody>';
+			<tbody class="taskResult">';
 while ($rowT = mysql_fetch_array($resList)) {
-	$cadList = $cadList."<tr><td>".$rowT['task'].'</td><td class="cent"><div align="center"><input id="task'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowT[0].'" /></div></td>'."</tr>";
+	$cadList = $cadList."<tr><td>".$rowT['task'].'</td><td class="cent"><div align="center"><input id="task'.$rowT[0].'" class="form-control" type="checkbox" required="" style="width:50px;" name="task'.$rowT[0].'" checked/></div></td>'."</tr>";
 }
 $cadList = $cadList."</tbody></table></div>";
 
@@ -211,7 +229,7 @@ if ($_SESSION['refroll_p'] != 1) {
 
             <div class="row">
             	<div class="form-group col-md-12">
-                	
+                	<h4 style="text-decoration:underline; margin-left:15px;">Things to do</h4>
                     <div class="input-group col-md-12">
                     	<?php echo $cadList; ?>
                     </div>
@@ -345,6 +363,23 @@ $(document).ready(function(){
 		  }
 	});//fin del boton eliminar
 	
+	//buscar task
+	$('#reftypetask').change(function(e) {
+        $.ajax({
+				data:  {refuser: <?php echo $_SESSION['idusuario']; ?>, 
+						reftype: $('#reftypetask').val(), 
+						accion: 'searchTaskByUserType'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						$('.taskResult').html(response);
+						
+				}
+		});
+    });
 	
 	$("#example").on("click",'.varborrar', function(){
 		  usersid =  $(this).attr("id");

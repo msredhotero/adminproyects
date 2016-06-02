@@ -383,7 +383,7 @@ return $res;
 } 
 
 function traerProyects() { 
-$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,(case when sendemail=1 then 'Yes' else 'No' end) as sendemail,refresponsible ,refstate
+$sql = "select idproyect,p.`order`,title,r.responsible,s.state,observations,(case when sendemail=1 then 'Yes' else 'No' end) as sendemail,price,p.commission,refresponsible ,refstate
 		from proyects p 
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate
@@ -393,7 +393,7 @@ return $res;
 } 
 
 function traerProyectsPorUsuario($idUser) { 
-$sql = "select idproyect,p.order,title,price,r.responsible,s.state,p.commission,observations,(case when sendemail=1 then 'Yes' else 'No' end) as sendemail,refresponsible ,refstate
+$sql = "select idproyect,p.`order`,title,r.responsible,s.state,observations,(case when sendemail=1 then 'Yes' else 'No' end) as sendemail,price,p.commission,refresponsible ,refstate
 		from proyects p 
 		inner join responsibles r on r.idresponsible = p.refresponsible
 		inner join states s on s.idstate = p.refstate

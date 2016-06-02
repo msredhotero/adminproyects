@@ -25,7 +25,7 @@ class Servicios {
 				$classVer = '';
 				break;
 			case 98:
-				$cantidad = 8;
+				$cantidad = 6;
 				$classMod = 'varmodificar';
 				$classVer = 'varver';
 				$lblVer	  = 'View';
@@ -54,6 +54,14 @@ class Servicios {
 				$lblEditar  = 'View';
 				$classTask= 'vartask';
 				$lblTask  = 'Task List';
+				$classEli = 'varborrar';
+				$idresultados = "resultados";
+				break;
+			case 94:
+				$cantidad = 8;
+				$classMod = 'varmodificar';
+				$classVer = 'varver';
+				$lblVer	  = 'View';
 				$classEli = 'varborrar';
 				$idresultados = "resultados";
 				break;

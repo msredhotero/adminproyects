@@ -77,12 +77,12 @@ $refCampo 	=  array("refemployee","refresponsible","refstate");
 /////////////////////// Opciones para la creacion del view  /////////////////////
 $cabeceras 		= "	<th>Order</th>
 					<th>Title</th>
-					<th>Price</th>
 					<th>Responsible</th>
 					<th>State</th>
-					<th>Commission</th>
 					<th>Observation</th>
-					<th>Send email</th>";
+					<th>Send email</th>
+					<th>Price</th>
+					<th>Commission</th>";
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
@@ -91,7 +91,7 @@ $cabeceras 		= "	<th>Order</th>
 
 $formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
 
-$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyects->traerProyects(),98);
+$lstCargados 	= $serviciosFunciones->camposTablaView($cabeceras,$serviciosProyects->traerProyects(),94);
 
 
 

@@ -74,8 +74,15 @@ $cabeceras 		= "	<th>Task</th>
 
 //////////////////////////////////////////////  FIN de los opciones //////////////////////////
 
+$typeT		= $serviciosTasks->traerTypeTaskByUser($_SESSION['idusuario']);
 
-$resList 	= $serviciosTasks->traerTasksByUser($_SESSION['idusuario']);
+if (mysql_num_rows($typeT)>0) {
+	$RefTypeT = mysql_result($typeT,0,0);
+} else {
+	$RefTypeT = 0;
+}
+
+$resList 	= $serviciosTasks->traerTasksByUserType($_SESSION['idusuario'],$RefTypeT);
 $order = mysql_num_rows($resList) + 1;	
 
 $formulario 	= $serviciosFunciones->camposTabla($insertar ,$tabla,$lblCambio,$lblreemplazo,$refdescripcion,$refCampo);
@@ -242,6 +249,24 @@ $(document).ready(function(){
 			alert("Error redo action.");	
 		  }
 	});//fin del boton eliminar
+	
+	//buscarOrden
+	$('#reftypetask').change(function(e) {
+        $.ajax({
+				data:  {refuser: <?php echo $_SESSION['idusuario']; ?>, 
+						reftype: $('#reftypetask').val(), 
+						accion: 'buscarOrden'},
+				url:   '../../ajax/ajax.php',
+				type:  'post',
+				beforeSend: function () {
+						
+				},
+				success:  function (response) {
+						$('#order').val(response);
+						
+				}
+		});
+    });
 	
 	$("#example").on("click",'.varmodificar', function(){
 		  usersid =  $(this).attr("id");

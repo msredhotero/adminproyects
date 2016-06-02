@@ -261,6 +261,16 @@ $res = $this->query($sql,0);
 return $res;
 }
 
+function traerTasksByUserType($idUser, $type) {
+$sql = "select t.idtask,t.task, tt.typetask,t.`order`,t.value,(case when t.active = 1 then 'Yes' else 'No' end) as active,t.refuser 
+		from tasks t
+		inner join typetask tt on t.reftypetask = tt.idtypetask
+		where t.refuser = ".$idUser." and t.reftypetask = ".$type."
+		order by idtask asc";
+$res = $this->query($sql,0);
+return $res;
+}
+
 function traerTasksByUserMenosUna($idUser, $id) {
 $sql = "select idtask,task,`order`,value,(case when active = 1 then 'Yes' else 'No' end) as active,refuser 
 		from tasks 
@@ -335,17 +345,17 @@ return $res;
 /* PARA CheckList */
 
 function insertarCheckList($refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
-$sql = "insert into checklist(idchecklist,refproject,refuser,enddate,alarm,typetask,refstatechecklist,executed,timelimitfinished,executedincomplete)
-values ('',".$refproject.",".$refuser.",'".utf8_decode($enddate)."','".utf8_decode($alarm)."','".utf8_decode($typetask)."',".$refstatechecklist.",".$executed.",".$timelimitfinished.",".$executedincomplete.")";
+$sql = "insert into checklist(idchecklist,refproject,refuser,enddate,alarm,reftypetask,refstatechecklist,executed,timelimitfinished,executedincomplete)
+values ('',".$refproject.",".$refuser.",'".utf8_decode($enddate)."','".utf8_decode($alarm)."',".$reftypetask.",".$refstatechecklist.",".$executed.",".$timelimitfinished.",".$executedincomplete.")";
 $res = $this->query($sql,1);
 return $res;
 }
 
 
-function modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$typetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
+function modificarCheckList($id,$refproject,$refuser,$enddate,$alarm,$reftypetask,$refstatechecklist,$executed,$timelimitfinished,$executedincomplete) {
 $sql = "update checklist
 set
-refproject = ".$refproject.",refuser = ".$refuser.",enddate = '".utf8_decode($enddate)."',alarm = '".utf8_decode($alarm)."',typetask = '".utf8_decode($typetask)."',refstatechecklist = ".$refstatechecklist.",executed = ".$executed.",timelimitfinished = ".$timelimitfinished.",executedincomplete = ".$executedincomplete."
+refproject = ".$refproject.",refuser = ".$refuser.",enddate = '".utf8_decode($enddate)."',alarm = '".utf8_decode($alarm)."',typetask = ".$reftypetask.",refstatechecklist = ".$refstatechecklist.",executed = ".$executed.",timelimitfinished = ".$timelimitfinished.",executedincomplete = ".$executedincomplete."
 where idchecklist =".$id;
 $res = $this->query($sql,0);
 return $res;
@@ -364,20 +374,20 @@ return $res;
 
 
 function traerCheckList() {
-$sql = "select idchecklist,refproject,refuser,enddate,alarm,typetask,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist order by 1";
+$sql = "select idchecklist,refproject,refuser,enddate,alarm,reftypetask,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist order by 1";
 $res = $this->query($sql,0);
 return $res;
 }
 
 
 function traerCheckListPorId($id) {
-$sql = "select idchecklist,refproject,refuser,enddate,alarm,typetask,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist where idchecklist =".$id;
+$sql = "select idchecklist,refproject,refuser,enddate,alarm,reftypetask,refstatechecklist,executed,timelimitfinished,executedincomplete from checklist where idchecklist =".$id;
 $res = $this->query($sql,0);
 return $res;
 }
 
 function traerCheckListByUser($idUser) {
-$sql = "select idchecklist,p.title,u.fullname,enddate,alarm,typetask,st.status,
+$sql = "select idchecklist,p.title,u.fullname,enddate,alarm,tp.typetask,st.status,
 				(case when executed = 1 then 'Yes' else 'No' end) as executed,
 				(case when timelimitfinished = 1 then 'Yes' else 'No' end) as timelimitfinished,
 				(case when executedincomplete = 1 then 'Yes' else 'No' end) as executedincomplete,
@@ -385,8 +395,9 @@ $sql = "select idchecklist,p.title,u.fullname,enddate,alarm,typetask,st.status,
 		from checklist cl
 		inner join proyects p on p.idproyect = cl.refproject
 		inner join statechecklist st on st.idstatechecklist = cl.refstatechecklist
+		inner join typetask tp on tp.idtypetask = cl.reftypetask
 		inner join user u on u.iduser = cl.refuser
-		where refuser =".$idUser;
+		where cl.refuser =".$idUser;
 $res = $this->query($sql,0);
 return $res;
 }
